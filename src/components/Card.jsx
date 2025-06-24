@@ -5,44 +5,89 @@ import { IconContext } from 'react-icons';
 import * as Icons from 'react-icons/io5'; // Ionicons as Io*
 
 function Card({ title, subtitle, onClick, icon, children, className = '', footer }) {
-  const { theme } = useTheme();
+  const { theme, isDark } = useTheme();
 
+  // Dynamically get icon component
   const IconComponent = icon ? Icons[`Io${icon.charAt(0).toUpperCase() + icon.slice(1)}`] : null;
 
-  const cardClasses = `
-    rounded-xl border p-5 shadow-md my-3 
-    bg-[${theme.card}] border-[${theme.border}] text-[${theme.text}]
-    ${className}
-  `;
+  const cardStyle = {
+    backgroundColor: isDark ? '#2a2a2a' : '#fff', // ⬅ Matches screenshot
+    borderColor: theme.border,
+    color: theme.text,
+    borderRadius: '16px',
+    padding: '20px',
+    margin: '12px 0',
+    boxShadow: isDark
+      ? '0 4px 12px rgba(0, 0, 0, 0.4)'
+      : '0 2px 8px rgba(0, 0, 0, 0.1)',
+    borderWidth: '1px',
+    borderStyle: 'solid',
+  };
+
+  const headerStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    marginBottom: '16px',
+  };
+
+  const iconContainerStyle = {
+    width: '40px',
+    height: '40px',
+    borderRadius: '12px',
+    backgroundColor: theme.primary + '15',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: '12px',
+  };
+
+  const titleStyle = {
+    fontSize: '1.125rem',
+    fontWeight: 600,
+    margin: 0,
+    color: theme.text,
+  };
+
+  const subtitleStyle = {
+    fontSize: '0.875rem',
+    marginTop: '4px',
+    color: theme.textSecondary,
+  };
 
   const content = (
-    <div className={cardClasses}>
+    <div className={className} style={cardStyle}>
       {(title || IconComponent) && (
-        <div className="flex items-center mb-4">
+        <div style={headerStyle}>
           {IconComponent && (
-            <div className="w-10 h-10 rounded-lg flex items-center justify-center mr-3"
-                 style={{ backgroundColor: theme.primary + '15' }}>
-              <IconContext.Provider value={{ color: theme.primary, size: '20px' }}>
+            <div style={iconContainerStyle}>
+              <IconContext.Provider value={{ color: theme.primary, size: '22px' }}>
                 <IconComponent />
               </IconContext.Provider>
             </div>
           )}
-          <div className="flex-1">
-            {title && <h2 className="text-lg font-semibold">{title}</h2>}
-            {subtitle && <p className="text-sm text-gray-500 dark:text-gray-400">{subtitle}</p>}
+          <div style={{ flex: 1 }}>
+            {title && <h2 style={titleStyle}>{title}</h2>}
+            {subtitle && <p style={subtitleStyle}>{subtitle}</p>}
           </div>
         </div>
       )}
 
-      <div className="mt-1">{children}</div>
+      <div style={{ marginTop: 4 }}>{children}</div>
 
-      {footer && <div className="pt-4 mt-4 border-t border-gray-200 dark:border-gray-700">{footer}</div>}
+      {footer && (
+        <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: `1px solid ${isDark ? '#444' : '#ccc'}` }}>
+          {footer}
+        </div>
+      )}
     </div>
   );
 
   if (onClick) {
     return (
-      <div onClick={onClick} className="cursor-pointer hover:shadow-lg transition duration-150">
+      <div
+        onClick={onClick}
+        className="cursor-pointer transition duration-150 hover:shadow-lg"
+      >
         {content}
       </div>
     );
