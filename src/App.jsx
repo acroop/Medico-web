@@ -22,7 +22,7 @@ const Layout = ({ children }) => {
   const { theme } = useTheme();
 
   return (
-    <div className=' bg-black'>
+    <div className='dark:bg-gray-900'>
       {/* You can add a navbar here if needed */}
       {children}
     </div>
