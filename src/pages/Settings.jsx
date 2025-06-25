@@ -17,37 +17,8 @@ import {
   LogOut, 
   ChevronRight 
 } from 'lucide-react';
-
-// Mock theme context
-const useTheme = () => {
-  const [isDark, setIsDark] = useState(false);
-  
-  const lightTheme = {
-    background: '#ffffff',
-    card: '#f8f9fa',
-    text: '#1a1a1a',
-    textSecondary: '#6c757d',
-    primary: '#007bff',
-    error: '#dc3545',
-    border: '#e9ecef'
-  };
-  
-  const darkTheme = {
-    background: '#1a1a1a',
-    card: '#2d2d2d',
-    text: '#ffffff',
-    textSecondary: '#adb5bd',
-    primary: '#0d6efd',
-    error: '#dc3545',
-    border: '#495057'
-  };
-  
-  return {
-    theme: isDark ? darkTheme : lightTheme,
-    isDark,
-    toggleTheme: () => setIsDark(!isDark)
-  };
-};
+import Layout from '../components/Layout';
+import { useTheme } from '../context/ThemeContext';
 
 const SettingsScreen = () => {
   const { theme, toggleTheme, isDark } = useTheme();
@@ -160,141 +131,143 @@ const SettingsScreen = () => {
   );
 
   return (
-    <div 
-      className="min-h-screen"
-      style={{ backgroundColor: theme.background }}
-    >
-      <div className="max-w-2xl mx-auto p-4">
-        <SettingSection title="Appearance">
-          <SwitchItem
-            title="Dark Mode"
-            description="Switch between light and dark theme"
-            value={isDark}
-            onValueChange={toggleTheme}
-            Icon={Moon}
-          />
-        </SettingSection>
-        
-        <SettingSection title="Notifications">
-          <SwitchItem
-            title="Enable Notifications"
-            description="Receive important updates and reminders"
-            value={notificationsEnabled}
-            onValueChange={setNotificationsEnabled}
-            Icon={Bell}
-          />
+    <Layout>
+      <div 
+        className="min-h-screen"
+        style={{ backgroundColor: theme.background }}
+      >
+        <div className="max-w-2xl mx-auto p-4">
+          <SettingSection title="Appearance">
+            <SwitchItem
+              title="Dark Mode"
+              description="Switch between light and dark theme"
+              value={isDark}
+              onValueChange={toggleTheme}
+              Icon={Moon}
+            />
+          </SettingSection>
           
-          <SwitchItem
-            title="Health Reminders"
-            description="Get reminders for period tracking, medications, etc."
-            value={remindersEnabled}
-            onValueChange={setRemindersEnabled}
-            Icon={AlarmClock}
-          />
-        </SettingSection>
-        
-        <SettingSection title="Privacy & Security">
-          <SwitchItem
-            title="Location Services"
-            description="Allow app to use your location for nearby services"
-            value={locationEnabled}
-            onValueChange={setLocationEnabled}
-            Icon={MapPin}
-          />
+          <SettingSection title="Notifications">
+            <SwitchItem
+              title="Enable Notifications"
+              description="Receive important updates and reminders"
+              value={notificationsEnabled}
+              onValueChange={setNotificationsEnabled}
+              Icon={Bell}
+            />
+            
+            <SwitchItem
+              title="Health Reminders"
+              description="Get reminders for period tracking, medications, etc."
+              value={remindersEnabled}
+              onValueChange={setRemindersEnabled}
+              Icon={AlarmClock}
+            />
+          </SettingSection>
           
-          <SwitchItem
-            title="Biometric Authentication"
-            description="Use fingerprint or face ID to secure your data"
-            value={biometricsEnabled}
-            onValueChange={setBiometricsEnabled}
-            Icon={Fingerprint}
-          />
+          <SettingSection title="Privacy & Security">
+            <SwitchItem
+              title="Location Services"
+              description="Allow app to use your location for nearby services"
+              value={locationEnabled}
+              onValueChange={setLocationEnabled}
+              Icon={MapPin}
+            />
+            
+            <SwitchItem
+              title="Biometric Authentication"
+              description="Use fingerprint or face ID to secure your data"
+              value={biometricsEnabled}
+              onValueChange={setBiometricsEnabled}
+              Icon={Fingerprint}
+            />
 
-          <SwitchItem
-            title="Data Backup"
-            description="Automatically backup your data to the cloud"
-            value={dataBackupEnabled}
-            onValueChange={setDataBackupEnabled}
-            Icon={CloudUpload}
-          />
+            <SwitchItem
+              title="Data Backup"
+              description="Automatically backup your data to the cloud"
+              value={dataBackupEnabled}
+              onValueChange={setDataBackupEnabled}
+              Icon={CloudUpload}
+            />
+            
+            <NavigationItem
+              title="Data Sharing Preferences"
+              Icon={ShieldCheck}
+              onPress={() => alert("Data Sharing Preferences")}
+            />
+          </SettingSection>
           
-          <NavigationItem
-            title="Data Sharing Preferences"
-            Icon={ShieldCheck}
-            onPress={() => alert("Data Sharing Preferences")}
-          />
-        </SettingSection>
-        
-        <SettingSection title="App Settings">
-          <NavigationItem
-            title="Language"
-            Icon={Globe}
-            onPress={() => alert("Language Settings")}
-          />
+          <SettingSection title="App Settings">
+            <NavigationItem
+              title="Language"
+              Icon={Globe}
+              onPress={() => alert("Language Settings")}
+            />
+            
+            <NavigationItem
+              title="Measurement Units"
+              Icon={Settings}
+              onPress={() => alert("Measurement Units Settings")}
+            />
+            
+            <SwitchItem
+              title="Analytics"
+              description="Help us improve by sending anonymous usage data"
+              value={analyticsEnabled}
+              onValueChange={setAnalyticsEnabled}
+              Icon={BarChart3}
+            />
+          </SettingSection>
           
-          <NavigationItem
-            title="Measurement Units"
-            Icon={Settings}
-            onPress={() => alert("Measurement Units Settings")}
-          />
+          <SettingSection title="Support">
+            <NavigationItem
+              title="Help Center"
+              Icon={HelpCircle}
+              onPress={() => alert("Help Center")}
+            />
+            
+            <NavigationItem
+              title="Report a Problem"
+              Icon={AlertTriangle}
+              onPress={() => alert("Report a Problem")}
+            />
+            
+            <NavigationItem
+              title="Privacy Policy"
+              Icon={FileText}
+              onPress={() => alert("Privacy Policy")}
+            />
+            
+            <NavigationItem
+              title="Terms of Service"
+              Icon={File}
+              onPress={() => alert("Terms of Service")}
+            />
+          </SettingSection>
           
-          <SwitchItem
-            title="Analytics"
-            description="Help us improve by sending anonymous usage data"
-            value={analyticsEnabled}
-            onValueChange={setAnalyticsEnabled}
-            Icon={BarChart3}
-          />
-        </SettingSection>
-        
-        <SettingSection title="Support">
-          <NavigationItem
-            title="Help Center"
-            Icon={HelpCircle}
-            onPress={() => alert("Help Center")}
-          />
-          
-          <NavigationItem
-            title="Report a Problem"
-            Icon={AlertTriangle}
-            onPress={() => alert("Report a Problem")}
-          />
-          
-          <NavigationItem
-            title="Privacy Policy"
-            Icon={FileText}
-            onPress={() => alert("Privacy Policy")}
-          />
-          
-          <NavigationItem
-            title="Terms of Service"
-            Icon={File}
-            onPress={() => alert("Terms of Service")}
-          />
-        </SettingSection>
-        
-        <button 
-          className="w-full flex items-center justify-center my-6 py-3 border rounded-lg hover:opacity-70 transition-opacity"
-          style={{ borderColor: theme.error }}
-          onClick={handleLogout}
-        >
-          <LogOut size={20} color={theme.error} />
-          <span 
-            className="text-base font-semibold ml-2"
-            style={{ color: theme.error }}
+          <button 
+            className="w-full flex items-center justify-center my-6 py-3 border rounded-lg hover:opacity-70 transition-opacity"
+            style={{ borderColor: theme.error }}
+            onClick={handleLogout}
           >
-            Log Out
-          </span>
-        </button>
-        
-        <div 
-          className="text-center text-sm mb-5"
-          style={{ color: theme.textSecondary }}
-        >
-          Version 1.0.0
+            <LogOut size={20} color={theme.error} />
+            <span 
+              className="text-base font-semibold ml-2"
+              style={{ color: theme.error }}
+            >
+              Log Out
+            </span>
+          </button>
+          
+          <div 
+            className="text-center text-sm mb-5"
+            style={{ color: theme.textSecondary }}
+          >
+            Version 1.0.0
+          </div>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 

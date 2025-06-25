@@ -11,6 +11,7 @@ import {
   CartesianGrid,
   Tooltip
 } from 'recharts';
+import Layout from '../components/Layout';
 
 
 const mockPregnancyData = {
@@ -85,6 +86,7 @@ const PregnancyTracker = () => {
   const trimester = pregnancyData.weeksPregnant > 26 ? 3 : pregnancyData.weeksPregnant > 13 ? 2 : 1;
 
   return (
+    <Layout>
     <div style={{ padding: '1rem', backgroundColor: theme.background, color: theme.text }}>
       <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>Pregnancy Tracker</h1>
       <p style={{ marginBottom: '1.5rem', color: theme.textSecondary }}>
@@ -242,6 +244,7 @@ const PregnancyTracker = () => {
         <IoAdd size={24} />
       </button>
     </div>
+    </Layout>
   );
 };
 
