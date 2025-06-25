@@ -1,7 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
-import './index.css'
+import './index.css';
+
 // Import all pages
 import Auth from './pages/Auth';
 import Onboarding from './pages/Onboarding';
@@ -17,13 +18,18 @@ import Settings from './pages/Settings';
 import Profile from './pages/Profile';
 import Notes from './pages/Notes';
 
-// Optional: Add a simple NavBar or Layout if needed
 const Layout = ({ children }) => {
   const { theme } = useTheme();
 
   return (
-    <div className='dark:bg-gray-900'>
-      {/* You can add a navbar here if needed */}
+    <div
+      style={{
+        backgroundColor: theme.background,
+        color: theme.text,
+        minHeight: '100vh',
+        transition: 'background-color 0.3s ease, color 0.3s ease',
+      }}
+    >
       {children}
     </div>
   );
@@ -45,7 +51,6 @@ const AppRoutes = () => (
     <Route path="/settings" element={<Settings />} />
     <Route path="/profile" element={<Profile />} />
     <Route path="/notes" element={<Notes />} />
-    {/* 404 fallback */}
     <Route path="*" element={<h2>404 - Page Not Found</h2>} />
   </Routes>
 );

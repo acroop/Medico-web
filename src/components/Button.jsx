@@ -1,57 +1,81 @@
 import React from 'react';
 import { useTheme } from '../context/ThemeContext';
-import { FaSpinner } from 'react-icons/fa';
 
-function Button({
+const Button = ({
   title,
   onClick,
   type = 'primary',
   size = 'medium',
   disabled = false,
   loading = false,
-  className = '',
-  textClassName = '',
-}) {
+  style,
+  textStyle,
+}) => {
   const { theme } = useTheme();
 
-  const baseStyles = {
-    primary: `bg-[${theme.primary}] text-white hover:opacity-90`,
-    secondary: `bg-[${theme.secondary}] text-white hover:opacity-90`,
-    outline: `border-2 border-[${theme.primary}] text-[${theme.primary}] bg-transparent`,
-    text: `text-[${theme.primary}] bg-transparent`,
+  // Style mappings
+  const buttonStyles = {
+    primary: {
+      backgroundColor: disabled ? theme.disabled : theme.primary,
+      color: 'white',
+      border: 'none',
+    },
+    secondary: {
+      backgroundColor: disabled ? theme.disabled : theme.secondary,
+      color: 'white',
+      border: 'none',
+    },
+    outline: {
+      backgroundColor: 'transparent',
+      color: disabled ? theme.disabled : theme.primary,
+      border: `2px solid ${disabled ? theme.disabled : theme.primary}`,
+    },
+    text: {
+      backgroundColor: 'transparent',
+      color: disabled ? theme.disabled : theme.primary,
+      border: 'none',
+    },
   };
 
   const sizeStyles = {
-    small: 'px-4 py-2 text-sm rounded-md',
-    medium: 'px-6 py-3 text-base rounded-lg',
-    large: 'px-8 py-4 text-lg rounded-xl',
+    small: {
+      padding: '6px 12px',
+      fontSize: '14px',
+      borderRadius: '16px',
+    },
+    medium: {
+      padding: '10px 20px',
+      fontSize: '16px',
+      borderRadius: '20px',
+    },
+    large: {
+      padding: '14px 28px',
+      fontSize: '18px',
+      borderRadius: '24px',
+    },
   };
-
-  const disabledStyles = 'opacity-60 cursor-not-allowed';
-
-  const combinedClass = `
-    inline-flex justify-center items-center font-semibold tracking-wide 
-    ${baseStyles[type]} 
-    ${sizeStyles[size]} 
-    ${disabled ? disabledStyles : 'cursor-pointer'}
-    ${className}
-  `;
-
-  const textColor = type === 'outline' || type === 'text' ? theme.primary : '#fff';
 
   return (
     <button
-      className={combinedClass}
       onClick={onClick}
       disabled={disabled || loading}
+      style={{
+        ...buttonStyles[type],
+        ...sizeStyles[size],
+        opacity: disabled ? 0.7 : 1,
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        fontWeight: 600,
+        letterSpacing: '0.3px',
+        ...style,
+      }}
     >
       {loading ? (
-        <FaSpinner className="animate-spin" size={18} color={textColor} />
+        <span style={{ color: buttonStyles[type].color }}>Loading...</span>
       ) : (
-        <span className={`${textClassName}`}>{title}</span>
+        <span style={{ ...textStyle }}>{title}</span>
       )}
     </button>
   );
-}
+};
 
 export default Button;
