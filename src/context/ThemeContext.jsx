@@ -15,6 +15,7 @@ export const lightTheme = {
   info: '#2196F3',
   disabled: '#CCCCCC',
   card: '#FFFFFF',
+  accent: '#64B5F6',
 };
 
 export const darkTheme = {
@@ -31,6 +32,7 @@ export const darkTheme = {
   info: '#64B5F6',
   disabled: '#666666',
   card: '#2D2D2D',
+  accent: '#FF69B4',
 };
 
 const ThemeContext = createContext({

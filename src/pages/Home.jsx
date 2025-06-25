@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FiCalendar, FiHeart, FiClipboard } from 'react-icons/fi';
 import { IoMedicalOutline, IoRibbonOutline } from 'react-icons/io5';
 import { useTheme } from '../context/ThemeContext';
+import Layout from '../components/Layout';
 
 const HomeScreen = () => {
   const navigate = useNavigate();
@@ -55,101 +56,103 @@ const HomeScreen = () => {
   ];
 
   return (
-    <div
-      className="min-h-screen px-4 py-6 flex flex-col items-center"
-      style={{ backgroundColor: theme.background, color: theme.text }}
-    >
-      <div className="w-full max-w-4xl">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-6">
-          <div>
-            <h1 className="text-2xl font-bold">Hello, Sarah</h1>
-            <p className="text-sm" style={{ color: theme.textSecondary }}>
-              How are you feeling today?
-            </p>
-          </div>
-          <div className="w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold" style={{ backgroundColor: theme.primary }}>
-            S
-          </div>
-        </div>
-
-        {/* Reminders stacked vertically */}
-        <div className="flex flex-col gap-4 mb-6">
-          <div className="p-4 rounded-lg shadow-md" style={{ backgroundColor: theme.surface }}>
-            <h2 className="text-sm font-semibold mb-1" style={{ color: theme.primary }}>
-              Upcoming Period
-            </h2>
-            <p className="text-xs mb-1" style={{ color: theme.textSecondary }}>
-              Expected on <strong style={{ color: theme.text }}>{upcomingPeriod}</strong>
-            </p>
-            <button
-              onClick={() => navigate('/period-tracker')}
-              className="mt-2 px-3 py-1 text-sm rounded border"
-              style={{
-                color: theme.primary,
-                borderColor: theme.primary,
-                backgroundColor: 'transparent',
-              }}
-            >
-              Track Period
-            </button>
-          </div>
-
-          <div className="p-4 rounded-lg shadow-md" style={{ backgroundColor: theme.surface }}>
-            <h2 className="text-sm font-semibold mb-1" style={{ color: theme.secondary }}>
-              Upcoming Appointment
-            </h2>
-            <p className="text-xs mb-1" style={{ color: theme.text }}>
-              {`${nextAppointment.date} at ${nextAppointment.time}`}
-            </p>
-            <p className="text-xs mb-2" style={{ color: theme.textSecondary }}>
-              With {nextAppointment.doctor}
-            </p>
-            <button
-              onClick={() => navigate('/consult-doctor')}
-              className="mt-2 px-3 py-1 text-sm rounded border"
-              style={{
-                color: theme.secondary,
-                borderColor: theme.secondary,
-                backgroundColor: 'transparent',
-              }}
-            >
-              View Details
-            </button>
-          </div>
-        </div>
-
-        {/* Features Section */}
-        <h2 className="text-lg font-semibold mb-4" style={{ color: theme.text }}>
-          Features
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {features.map((feature, index) => (
-            <div
-              key={index}
-              onClick={() => navigate(feature.route)}
-              className="p-4 rounded-lg shadow-md cursor-pointer transition hover:shadow-lg"
-              style={{ backgroundColor: theme.card }}
-            >
-              <div className="flex items-center gap-2 mb-2">
-                <div
-                  className="p-2 rounded-full"
-                  style={{ backgroundColor: theme.surface, color: theme.primary }}
-                >
-                  {feature.icon}
-                </div>
-                <h3 className="text-sm font-semibold" style={{ color: theme.text }}>
-                  {feature.title}
-                </h3>
-              </div>
-              <p className="text-xs" style={{ color: theme.textSecondary }}>
-                {feature.description}
+    <Layout>
+      <div className="min-h-screen px-4 py-6 flex flex-col items-center" style={{ backgroundColor: theme.background, color: theme.text }}>
+        <div className="w-full max-w-4xl">
+          {/* Header */}
+          <div className="flex justify-between items-center mb-6 mt-2">
+            <div>
+              <h1 className="text-2xl font-bold">Hello, Sarah</h1>
+              <p className="text-sm" style={{ color: theme.textSecondary }}>
+                How are you feeling today?
               </p>
             </div>
-          ))}
+            <div
+              className="w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold"
+              style={{ backgroundColor: theme.primary }}
+            >
+              S
+            </div>
+          </div>
+
+          {/* Reminders stacked vertically */}
+          <div className="flex flex-col gap-4 mb-6">
+            <div className="p-4 rounded-lg shadow-md" style={{ backgroundColor: theme.surface }}>
+              <h2 className="text-sm font-semibold mb-1" style={{ color: theme.primary }}>
+                Upcoming Period
+              </h2>
+              <p className="text-xs mb-1" style={{ color: theme.textSecondary }}>
+                Expected on <strong style={{ color: theme.text }}>{upcomingPeriod}</strong>
+              </p>
+              <button
+                onClick={() => navigate('/period-tracker')}
+                className="mt-2 px-3 py-1 text-sm rounded border"
+                style={{
+                  color: theme.primary,
+                  borderColor: theme.primary,
+                  backgroundColor: 'transparent',
+                }}
+              >
+                Track Period
+              </button>
+            </div>
+
+            <div className="p-4 rounded-lg shadow-md" style={{ backgroundColor: theme.surface }}>
+              <h2 className="text-sm font-semibold mb-1" style={{ color: theme.secondary }}>
+                Upcoming Appointment
+              </h2>
+              <p className="text-xs mb-1" style={{ color: theme.text }}>
+                {`${nextAppointment.date} at ${nextAppointment.time}`}
+              </p>
+              <p className="text-xs mb-2" style={{ color: theme.textSecondary }}>
+                With {nextAppointment.doctor}
+              </p>
+              <button
+                onClick={() => navigate('/consult-doctor')}
+                className="mt-2 px-3 py-1 text-sm rounded border"
+                style={{
+                  color: theme.secondary,
+                  borderColor: theme.secondary,
+                  backgroundColor: 'transparent',
+                }}
+              >
+                View Details
+              </button>
+            </div>
+          </div>
+
+          {/* Features Section */}
+          <h2 className="text-lg font-semibold mb-4" style={{ color: theme.text }}>
+            Features
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {features.map((feature, index) => (
+              <div
+                key={index}
+                onClick={() => navigate(feature.route)}
+                className="p-4 rounded-lg shadow-md cursor-pointer transition hover:shadow-lg"
+                style={{ backgroundColor: theme.card }}
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  <div
+                    className="p-2 rounded-full"
+                    style={{ backgroundColor: theme.surface, color: theme.primary }}
+                  >
+                    {feature.icon}
+                  </div>
+                  <h3 className="text-sm font-semibold" style={{ color: theme.text }}>
+                    {feature.title}
+                  </h3>
+                </div>
+                <p className="text-xs" style={{ color: theme.textSecondary }}>
+                  {feature.description}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 

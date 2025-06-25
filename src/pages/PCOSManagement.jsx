@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import { Activity, Apple, Bed, Plus, FileText, Video, Mic, Link, CheckCircle, Eye, EyeOff, ChevronRight } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
+import Card from '../components/Card';
 
 const PCOSManagementScreen = () => {
+  const { theme } = useTheme();
   const [isDiagnosed, setIsDiagnosed] = useState(true);
 
   const symptoms = [
-    { id: '1', name: 'Irregular periods', frequency: 0.9, tracked: true },
-    { id: '2', name: 'Weight gain', frequency: 0.7, tracked: true },
-    { id: '3', name: 'Acne', frequency: 0.5, tracked: true },
-    { id: '4', name: 'Hair growth', frequency: 0.4, tracked: false },
-    { id: '5', name: 'Fatigue', frequency: 0.65, tracked: true },
+    { id: '1', name: 'Irregular periods', tracked: true },
+    { id: '2', name: 'Weight gain', tracked: true },
+    { id: '3', name: 'Acne', tracked: true },
+    { id: '4', name: 'Hair growth', tracked: false },
+    { id: '5', name: 'Fatigue', tracked: true },
   ];
 
   const medications = [
@@ -17,10 +20,10 @@ const PCOSManagementScreen = () => {
     { id: '2', name: 'Birth Control', dosage: '1 pill', frequency: 'once daily', timeOfDay: 'morning' },
   ];
 
-  const recentSymptomLogs = [
-    { date: '2025-06-23', symptoms: ['Irregular periods', 'Acne'], intensityLevel: 7, notes: 'Stress might be worsening symptoms' },
-    { date: '2025-06-20', symptoms: ['Weight gain', 'Fatigue'], intensityLevel: 5, notes: 'Started new diet' },
-    { date: '2025-06-15', symptoms: ['Hair growth', 'Acne'], intensityLevel: 6, notes: '' },
+  const recentLogs = [
+    { date: '2025-06-23', symptoms: ['Irregular periods', 'Acne'], level: 7, notes: 'Stress might be worsening symptoms' },
+    { date: '2025-06-20', symptoms: ['Weight gain', 'Fatigue'], level: 5, notes: 'Started new diet' },
+    { date: '2025-06-15', symptoms: ['Hair growth', 'Acne'], level: 6, notes: '' },
   ];
 
   const resources = [
@@ -30,144 +33,199 @@ const PCOSManagementScreen = () => {
     { id: '4', title: 'Exercise for PCOS', type: 'article' },
   ];
 
-  const getResourceIcon = (type) => {
-    switch(type) {
-      case 'article': return <FileText className="text-blue-500" />;
-      case 'video': return <Video className="text-blue-500" />;
-      case 'podcast': return <Mic className="text-blue-500" />;
-      default: return <Link className="text-blue-500" />;
+  const getIcon = (type) => {
+    switch (type) {
+      case 'article': return <FileText style={{ color: theme.accent }} />;
+      case 'video': return <Video style={{ color: theme.accent }} />;
+      case 'podcast': return <Mic style={{ color: theme.accent }} />;
+      default: return <Link style={{ color: theme.accent }} />;
     }
   };
 
   return (
-    <div className="p-4 max-w-4xl mx-auto bg-gray-50 min-h-screen">
-      <h1 className="text-3xl font-bold mb-2 text-gray-800">PCOS Management</h1>
-      <p className="text-gray-600 mb-6">Track and manage your PCOS journey</p>
+    <div style={{ padding: '1rem', backgroundColor: theme.background, color: theme.text }}>
+      <h1 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>PCOS Management</h1>
+      <p style={{ marginBottom: '1.5rem', color: theme.textSecondary }}>
+        Track and manage your PCOS journey
+      </p>
 
       {!isDiagnosed ? (
-        <div className="bg-white p-6 shadow-sm rounded-lg mb-6 border border-gray-200">
-          <h2 className="text-xl font-semibold mb-3 text-gray-800">PCOS Assessment</h2>
-          <p className="mb-4 text-gray-600">Not sure if you have PCOS? Take our assessment to track your symptoms and get personalized guidance.</p>
-          <button 
-            className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg transition-colors" 
+        <Card title="PCOS Assessment">
+          <p style={{ color: theme.textSecondary }}>Take our assessment for guidance.</p>
+          <button
             onClick={() => setIsDiagnosed(true)}
+            style={{
+              marginTop: '1rem',
+              backgroundColor: theme.accent,
+              color: theme.buttonText,
+              padding: '10px 20px',
+              borderRadius: '8px',
+              border: 'none',
+              cursor: 'pointer'
+            }}
           >
             Start Assessment
           </button>
-        </div>
+        </Card>
       ) : (
         <>
-          <div className="bg-white p-6 shadow-sm rounded-lg mb-6 border border-gray-200">
-            <h2 className="text-xl font-semibold mb-4 text-gray-800">Tracked Symptoms</h2>
-            <div className="space-y-3">
-              {symptoms.map(symptom => (
-                <div key={symptom.id} className="flex justify-between items-center py-3 border-b border-gray-100 last:border-b-0">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-3 h-3 rounded-full ${symptom.tracked ? 'bg-blue-500' : 'bg-gray-300'}`}></div>
-                    <span className="text-gray-700">{symptom.name}</span>
-                  </div>
-                  {symptom.tracked ? <Eye className="text-blue-500 text-lg" /> : <EyeOff className="text-gray-400 text-lg" />}
+          <Card title="Tracked Symptoms">
+            {symptoms.map(symptom => (
+              <div key={symptom.id} style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '8px 0',
+                borderBottom: `1px solid ${theme.border}`
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div style={{
+                    width: 10,
+                    height: 10,
+                    borderRadius: '50%',
+                    backgroundColor: symptom.tracked ? theme.accent : theme.border
+                  }}></div>
+                  <span>{symptom.name}</span>
                 </div>
-              ))}
-            </div>
-          </div>
+                {symptom.tracked ? <Eye style={{ color: theme.accent }} /> : <EyeOff style={{ color: theme.textSecondary }} />}
+              </div>
+            ))}
+          </Card>
 
-          <div className="bg-white p-6 shadow-sm rounded-lg mb-6 border border-gray-200">
-            <h2 className="text-xl font-semibold mb-4 text-gray-800">Medications</h2>
-            <div className="space-y-4">
-              {medications.map(med => (
-                <div key={med.id} className="flex justify-between items-center border-b border-gray-100 pb-4 last:border-b-0 last:pb-0">
-                  <div>
-                    <p className="font-medium text-gray-800">{med.name}</p>
-                    <p className="text-sm text-gray-600">{med.dosage} • {med.frequency}</p>
-                    <p className="text-sm text-gray-500 italic">{med.timeOfDay}</p>
-                  </div>
-                  <CheckCircle className="text-green-500 text-2xl" />
+          <Card title="Medications">
+            {medications.map(med => (
+              <div key={med.id} style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                paddingBottom: '1rem',
+                borderBottom: `1px solid ${theme.border}`
+              }}>
+                <div>
+                  <p style={{ fontWeight: '500' }}>{med.name}</p>
+                  <p style={{ fontSize: '0.9rem', color: theme.textSecondary }}>{med.dosage} • {med.frequency}</p>
+                  <p style={{ fontSize: '0.85rem', fontStyle: 'italic', color: theme.textSecondary }}>{med.timeOfDay}</p>
                 </div>
-              ))}
-            </div>
-          </div>
+                <CheckCircle style={{ color: theme.success }} />
+              </div>
+            ))}
+          </Card>
 
-          <div className="bg-white p-6 shadow-sm rounded-lg mb-6 border border-gray-200">
-            <h2 className="text-xl font-semibold mb-4 text-gray-800">Recent Logs</h2>
-            <div className="space-y-4">
-              {recentSymptomLogs.map((log, idx) => (
-                <div key={idx} className="border-b border-gray-100 pb-4 last:border-b-0 last:pb-0">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-gray-700 font-medium">{new Date(log.date).toLocaleDateString()}</span>
-                    <span className={`text-xs px-3 py-1 rounded-full font-medium ${
-                      log.intensityLevel >= 7 ? 'bg-red-100 text-red-700' :
-                      log.intensityLevel >= 4 ? 'bg-yellow-100 text-yellow-700' :
-                      'bg-green-100 text-green-700'
-                    }`}>
-                      Level {log.intensityLevel}/10
+          <Card title="Recent Logs">
+            {recentLogs.map((log, idx) => (
+              <div key={idx} style={{
+                marginBottom: '1rem',
+                paddingBottom: '1rem',
+                borderBottom: `1px solid ${theme.border}`
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+                  <span style={{ fontWeight: 500 }}>{new Date(log.date).toDateString()}</span>
+                  <span style={{
+                    fontSize: '0.75rem',
+                    padding: '4px 10px',
+                    backgroundColor: theme.accent,
+                    borderRadius: '12px',
+                    color: theme.buttonText,
+                    fontWeight: 600
+                  }}>
+                    Level {log.level}/10
+                  </span>
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '0.5rem' }}>
+                  {log.symptoms.map((s, i) => (
+                    <span key={i} style={{
+                      backgroundColor: theme.badgeBackground,
+                      color: theme.accent,
+                      padding: '4px 10px',
+                      borderRadius: '12px',
+                      fontSize: '0.875rem'
+                    }}>
+                      {s}
                     </span>
-                  </div>
-                  <div className="flex flex-wrap gap-2 mb-2">
-                    {log.symptoms.map((s, i) => (
-                      <span key={i} className="bg-pink-100 text-pink-700 px-3 py-1 rounded-full text-sm font-medium">{s}</span>
-                    ))}
-                  </div>
-                  {log.notes && <p className="text-sm italic text-gray-600">{log.notes}</p>}
+                  ))}
                 </div>
-              ))}
-            </div>
-          </div>
+                {log.notes && <p style={{ fontStyle: 'italic', fontSize: '0.85rem', color: theme.textSecondary }}>{log.notes}</p>}
+              </div>
+            ))}
+            <p style={{ textAlign: 'center', color: theme.accent, cursor: 'pointer' }}>View All Logs</p>
+          </Card>
         </>
       )}
 
-      <div className="bg-white p-6 shadow-sm rounded-lg mb-6 border border-gray-200">
-        <h2 className="text-xl font-semibold mb-4 text-gray-800">PCOS Resources</h2>
-        <div className="space-y-3">
-          {resources.map(res => (
-            <div key={res.id} className="flex justify-between items-center py-3 border-b border-gray-100 last:border-b-0 hover:bg-gray-50 transition-colors cursor-pointer rounded px-2">
-              <div className="flex items-center gap-3">
-                {getResourceIcon(res.type)}
-                <span className="text-gray-700">{res.title}</span>
-              </div>
-              <ChevronRight className="text-gray-400" />
-            </div>
-          ))}
-        </div>
+      <Card title="PCOS Resources">
+  {resources.map(res => (
+    <div key={res.id} style={{
+      backgroundColor: theme.surface || '#1c1c1c', // fallback dark shade
+      borderRadius: '10px',
+      padding: '10px 16px',
+      marginBottom: '10px',
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      cursor: 'pointer'
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        {getIcon(res.type)}
+        <span>{res.title}</span>
       </div>
+      <ChevronRight style={{ color: theme.textSecondary }} />
+    </div>
+  ))}
+</Card>
 
-      <div className="bg-white p-6 shadow-sm rounded-lg mb-20 border border-gray-200">
-        <h2 className="text-xl font-semibold mb-4 text-gray-800">Lifestyle Recommendations</h2>
-        <div className="space-y-6">
-          <div className="flex items-start gap-4">
-            <div className="bg-pink-100 p-3 rounded-full">
-              <Activity className="text-pink-600 text-xl" />
+
+      <Card title="Lifestyle Recommendations">
+        {[
+          {
+            icon: <Activity style={{ color: theme.accent }} />,
+            title: 'Exercise Regularly',
+            description: 'Aim for 30 minutes of moderate exercise most days.'
+          },
+          {
+            icon: <Apple style={{ color: theme.accent }} />,
+            title: 'Balanced Diet',
+            description: 'Eat low-glycemic foods, lean proteins, fruits, and veggies.'
+          },
+          {
+            icon: <Bed style={{ color: theme.accent }} />,
+            title: 'Prioritize Sleep',
+            description: 'Aim for 7–9 hours of quality sleep per night.'
+          }
+        ].map((rec, idx) => (
+          <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '1rem' }}>
+            <div style={{
+              backgroundColor: theme.badgeBackground,
+              padding: '10px',
+              borderRadius: '50%'
+            }}>
+              {rec.icon}
             </div>
             <div>
-              <h3 className="font-semibold text-gray-800 mb-1">Exercise Regularly</h3>
-              <p className="text-sm text-gray-600">Aim for 30 minutes of moderate exercise most days of the week.</p>
+              <p style={{ fontWeight: 600 }}>{rec.title}</p>
+              <p style={{ color: theme.textSecondary, fontSize: '0.9rem' }}>{rec.description}</p>
             </div>
           </div>
+        ))}
+      </Card>
 
-          <div className="flex items-start gap-4">
-            <div className="bg-pink-100 p-3 rounded-full">
-              <Apple className="text-pink-600 text-xl" />
-            </div>
-            <div>
-              <h3 className="font-semibold text-gray-800 mb-1">Balanced Diet</h3>
-              <p className="text-sm text-gray-600">Focus on low-glycemic foods, lean proteins, fruits, and vegetables.</p>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-4">
-            <div className="bg-pink-100 p-3 rounded-full">
-              <Bed className="text-pink-600 text-xl" />
-            </div>
-            <div>
-              <h3 className="font-semibold text-gray-800 mb-1">Prioritize Sleep</h3>
-              <p className="text-sm text-gray-600">Aim for 7–9 hours of quality sleep each night.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <button className="fixed bottom-6 right-6 bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-full shadow-lg transition-colors">
-        <Plus className="text-xl" />
+      <button
+        style={{
+          position: 'fixed',
+          bottom: '1.5rem',
+          right: '1.5rem',
+          width: '56px',
+          height: '56px',
+          borderRadius: '50%',
+          backgroundColor: theme.accent,
+          color: theme.buttonText,
+          border: 'none',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          boxShadow: '0 2px 5px rgba(0,0,0,0.25)',
+          cursor: 'pointer'
+        }}
+      >
+        <Plus size={24} />
       </button>
     </div>
   );
