@@ -3,16 +3,16 @@ import {
   IoPersonOutline,
   IoBusinessOutline,
   IoAdd,
-  IoDocumentTextOutline,
+  IoClose,
   IoMedkitOutline,
   IoFitnessOutline,
   IoMedicalOutline,
   IoShieldCheckmarkOutline,
   IoAlertCircleOutline,
-  IoClose,
 } from 'react-icons/io5';
 import Layout from '../components/Layout';
 import { useTheme } from '../context/ThemeContext';
+import Card from '../components/Card';
 
 const initialRecords = [
   {
@@ -63,11 +63,11 @@ const initialRecords = [
 ];
 
 const iconMap = {
-  medication: <IoMedkitOutline />,
-  condition: <IoFitnessOutline />,
-  procedure: <IoMedicalOutline />,
-  vaccination: <IoShieldCheckmarkOutline />,
-  allergy: <IoAlertCircleOutline />,
+  medication: 'MedkitOutline',
+  condition: 'FitnessOutline',
+  procedure: 'MedicalOutline',
+  vaccination: 'ShieldCheckmarkOutline',
+  allergy: 'AlertCircleOutline',
 };
 
 const MedicalHistoryScreen = () => {
@@ -115,59 +115,45 @@ const MedicalHistoryScreen = () => {
         style={{ backgroundColor: theme.background, color: theme.text }}
       >
         <div className="w-full max-w-2xl">
-          <h1 className="text-3xl font-bold mb-2" style={{ color: theme.text }}>
-            Medical Records
-          </h1>
+          <h1 className="text-3xl font-bold mb-2">Medical Records</h1>
           <p className="mb-6" style={{ color: theme.textSecondary }}>
             Manage your health history
           </p>
 
           {records.map((record) => (
-            <div
+            <Card
               key={record.id}
-              className="p-4 rounded-lg shadow mb-4"
-              style={{ backgroundColor: theme.surface, color: theme.text }}
-            >
-              <div className="flex justify-between items-center mb-2">
-                <div className="flex items-center gap-2">
-                  <div style={{ color: theme.primary, fontSize: 22 }}>
-                    {iconMap[record.type]}
+              title={record.name}
+              subtitle={`Date: ${new Date(record.date).toLocaleDateString('en-US')}`}
+              icon={iconMap[record.type]}
+              footer={
+                <div className="flex justify-between items-center text-sm" style={{ color: theme.textSecondary }}>
+                  <div className="flex gap-2">
+                    {record.doctor && (
+                      <span className="flex items-center gap-1">
+                        <IoPersonOutline />
+                        {record.doctor}
+                      </span>
+                    )}
+                    {record.hospital && (
+                      <span className="flex items-center gap-1">
+                        <IoBusinessOutline />
+                        {record.hospital}
+                      </span>
+                    )}
                   </div>
-                  <h2 className="text-lg font-semibold">{record.name}</h2>
+                  <button onClick={() => handleDelete(record.id)} className="text-red-500 text-xs">
+                    Delete
+                  </button>
                 </div>
-                <span style={{ color: theme.textSecondary, fontSize: 12 }}>
-                  {new Date(record.date).toLocaleDateString('en-US')}
-                </span>
-              </div>
-              <p className="text-sm" style={{ color: theme.text }}>
-                {record.details}
-              </p>
-              <div className="flex gap-4 mt-3 text-sm" style={{ color: theme.textSecondary }}>
-                {record.doctor && (
-                  <div className="flex items-center gap-1">
-                    <IoPersonOutline />
-                    <span>{record.doctor}</span>
-                  </div>
-                )}
-                {record.hospital && (
-                  <div className="flex items-center gap-1">
-                    <IoBusinessOutline />
-                    <span>{record.hospital}</span>
-                  </div>
-                )}
-              </div>
-              <button
-                onClick={() => handleDelete(record.id)}
-                className="mt-2 text-xs"
-                style={{ color: 'red' }}
-              >
-                Delete
-              </button>
-            </div>
+              }
+            >
+              <p className="text-sm">{record.details}</p>
+            </Card>
           ))}
         </div>
 
-        {/* Floating + Button */}
+        {/* Floating Add Button */}
         <button
           onClick={() => setShowModal(true)}
           style={{
@@ -184,7 +170,7 @@ const MedicalHistoryScreen = () => {
           <IoAdd size={24} />
         </button>
 
-        {/* Modal */}
+        {/* Modal for Adding Record */}
         {showModal && (
           <div
             className="fixed inset-0 z-50 flex justify-center items-center"
@@ -226,7 +212,11 @@ const MedicalHistoryScreen = () => {
                   value={form.name}
                   onChange={handleChange}
                   className="w-full p-2 border rounded"
-                  style={{ backgroundColor: isDark ? '#333' : '#fff', borderColor: theme.border, color: theme.text }}
+                  style={{
+                    backgroundColor: isDark ? '#333' : '#fff',
+                    borderColor: theme.border,
+                    color: theme.text,
+                  }}
                 />
                 <input
                   type="date"
@@ -234,7 +224,11 @@ const MedicalHistoryScreen = () => {
                   value={form.date}
                   onChange={handleChange}
                   className="w-full p-2 border rounded"
-                  style={{ backgroundColor: isDark ? '#333' : '#fff', borderColor: theme.border, color: theme.text }}
+                  style={{
+                    backgroundColor: isDark ? '#333' : '#fff',
+                    borderColor: theme.border,
+                    color: theme.text,
+                  }}
                 />
                 <input
                   type="text"
@@ -243,7 +237,11 @@ const MedicalHistoryScreen = () => {
                   value={form.doctor}
                   onChange={handleChange}
                   className="w-full p-2 border rounded"
-                  style={{ backgroundColor: isDark ? '#333' : '#fff', borderColor: theme.border, color: theme.text }}
+                  style={{
+                    backgroundColor: isDark ? '#333' : '#fff',
+                    borderColor: theme.border,
+                    color: theme.text,
+                  }}
                 />
                 <input
                   type="text"
@@ -252,7 +250,11 @@ const MedicalHistoryScreen = () => {
                   value={form.hospital}
                   onChange={handleChange}
                   className="w-full p-2 border rounded"
-                  style={{ backgroundColor: isDark ? '#333' : '#fff', borderColor: theme.border, color: theme.text }}
+                  style={{
+                    backgroundColor: isDark ? '#333' : '#fff',
+                    borderColor: theme.border,
+                    color: theme.text,
+                  }}
                 />
                 <textarea
                   name="details"
@@ -261,7 +263,11 @@ const MedicalHistoryScreen = () => {
                   onChange={handleChange}
                   className="w-full p-2 border rounded"
                   rows={3}
-                  style={{ backgroundColor: isDark ? '#333' : '#fff', borderColor: theme.border, color: theme.text }}
+                  style={{
+                    backgroundColor: isDark ? '#333' : '#fff',
+                    borderColor: theme.border,
+                    color: theme.text,
+                  }}
                 />
                 <button
                   onClick={handleAdd}
