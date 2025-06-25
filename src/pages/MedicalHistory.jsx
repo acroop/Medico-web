@@ -9,10 +9,12 @@ import {
   IoMedicalOutline,
   IoShieldCheckmarkOutline,
   IoAlertCircleOutline,
+  IoClose,
 } from 'react-icons/io5';
 import Layout from '../components/Layout';
+import { useTheme } from '../context/ThemeContext';
 
-const mockMedicalRecords = [
+const initialRecords = [
   {
     id: '1',
     type: 'medication',
@@ -69,107 +71,209 @@ const iconMap = {
 };
 
 const MedicalHistoryScreen = () => {
-  const [activeTab, setActiveTab] = useState('all');
+  const { theme, isDark } = useTheme();
+  const [records, setRecords] = useState(initialRecords);
+  const [showModal, setShowModal] = useState(false);
+  const [form, setForm] = useState({
+    type: 'medication',
+    name: '',
+    date: '',
+    details: '',
+    doctor: '',
+    hospital: '',
+  });
 
-  const filteredRecords =
-    activeTab === 'all'
-      ? mockMedicalRecords
-      : mockMedicalRecords.filter(record => record.type === activeTab);
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
-  const tabs = [
-    { id: 'all', label: 'All' },
-    { id: 'medication', label: 'Medications' },
-    { id: 'condition', label: 'Conditions' },
-    { id: 'procedure', label: 'Procedures' },
-    { id: 'vaccination', label: 'Vaccinations' },
-    { id: 'allergy', label: 'Allergies' },
-  ];
+  const handleAdd = () => {
+    const newRecord = {
+      ...form,
+      id: Date.now().toString(),
+    };
+    setRecords((prev) => [newRecord, ...prev]);
+    setForm({
+      type: 'medication',
+      name: '',
+      date: '',
+      details: '',
+      doctor: '',
+      hospital: '',
+    });
+    setShowModal(false);
+  };
+
+  const handleDelete = (id) => {
+    setRecords((prev) => prev.filter((record) => record.id !== id));
+  };
 
   return (
     <Layout>
-      <div className="relative min-h-screen bg-white dark:bg-gray-900 p-6">
-        {/* Header */}
-        <div className="mb-4">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Medical Records</h1>
-          <p className="text-gray-600 dark:text-gray-400">Manage your health history</p>
-        </div>
+      <div
+        className="min-h-screen px-4 py-6 flex flex-col items-center"
+        style={{ backgroundColor: theme.background, color: theme.text }}
+      >
+        <div className="w-full max-w-2xl">
+          <h1 className="text-3xl font-bold mb-2" style={{ color: theme.text }}>
+            Medical Records
+          </h1>
+          <p className="mb-6" style={{ color: theme.textSecondary }}>
+            Manage your health history
+          </p>
 
-        {/* Tabs */}
-        <div className="flex overflow-x-auto border-b border-gray-200 dark:border-gray-700 mb-4">
-          {tabs.map(tab => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`px-4 py-2 text-sm font-medium whitespace-nowrap ${
-                activeTab === tab.id
-                  ? 'border-b-2 border-blue-600 text-blue-600'
-                  : 'text-gray-500 hover:text-blue-500'
-              }`}
+          {records.map((record) => (
+            <div
+              key={record.id}
+              className="p-4 rounded-lg shadow mb-4"
+              style={{ backgroundColor: theme.surface, color: theme.text }}
             >
-              {tab.label}
-            </button>
+              <div className="flex justify-between items-center mb-2">
+                <div className="flex items-center gap-2">
+                  <div style={{ color: theme.primary, fontSize: 22 }}>
+                    {iconMap[record.type]}
+                  </div>
+                  <h2 className="text-lg font-semibold">{record.name}</h2>
+                </div>
+                <span style={{ color: theme.textSecondary, fontSize: 12 }}>
+                  {new Date(record.date).toLocaleDateString('en-US')}
+                </span>
+              </div>
+              <p className="text-sm" style={{ color: theme.text }}>
+                {record.details}
+              </p>
+              <div className="flex gap-4 mt-3 text-sm" style={{ color: theme.textSecondary }}>
+                {record.doctor && (
+                  <div className="flex items-center gap-1">
+                    <IoPersonOutline />
+                    <span>{record.doctor}</span>
+                  </div>
+                )}
+                {record.hospital && (
+                  <div className="flex items-center gap-1">
+                    <IoBusinessOutline />
+                    <span>{record.hospital}</span>
+                  </div>
+                )}
+              </div>
+              <button
+                onClick={() => handleDelete(record.id)}
+                className="mt-2 text-xs"
+                style={{ color: 'red' }}
+              >
+                Delete
+              </button>
+            </div>
           ))}
         </div>
 
-        {/* Records */}
-        <div className="space-y-4">
-          {filteredRecords.length > 0 ? (
-            filteredRecords.map(record => (
-              <div key={record.id} className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    <div className="text-xl text-blue-600">{iconMap[record.type]}</div>
-                    <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
-                      {record.name}
-                    </h2>
-                  </div>
-                  <span className="text-sm text-gray-500">
-                    {new Date(record.date).toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: 'short',
-                      day: 'numeric',
-                    })}
-                  </span>
-                </div>
-
-                <p className="text-sm text-gray-700 dark:text-gray-300">{record.details}</p>
-
-                <div className="flex gap-4 mt-3 text-sm text-gray-500 dark:text-gray-400">
-                  {record.doctor && (
-                    <div className="flex items-center gap-1">
-                      <IoPersonOutline />
-                      <span>{record.doctor}</span>
-                    </div>
-                  )}
-                  {record.hospital && (
-                    <div className="flex items-center gap-1">
-                      <IoBusinessOutline />
-                      <span>{record.hospital}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="text-center mt-20">
-              <IoDocumentTextOutline className="text-6xl text-gray-300 dark:text-gray-600 mb-4 mx-auto" />
-              <p className="text-lg font-semibold text-gray-600 dark:text-gray-300">
-                No medical records found
-              </p>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                Add your first record to start tracking your health history
-              </p>
-            </div>
-          )}
-        </div>
-
-        {/* Floating Button */}
+        {/* Floating + Button */}
         <button
-          onClick={() => alert('Navigate to Add Record Screen')}
-          className="fixed bottom-6 right-6 bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg"
+          onClick={() => setShowModal(true)}
+          style={{
+            backgroundColor: theme.primary,
+            color: '#fff',
+            position: 'fixed',
+            bottom: 24,
+            right: 24,
+            padding: 16,
+            borderRadius: '9999px',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+          }}
         >
           <IoAdd size={24} />
         </button>
+
+        {/* Modal */}
+        {showModal && (
+          <div
+            className="fixed inset-0 z-50 flex justify-center items-center"
+            style={{ backgroundColor: 'rgba(0, 0, 0, 0.7)' }}
+          >
+            <div
+              className="rounded-lg p-6 w-full max-w-md relative"
+              style={{ backgroundColor: theme.surface, color: theme.text }}
+            >
+              <button
+                onClick={() => setShowModal(false)}
+                style={{ position: 'absolute', top: 12, right: 12, color: theme.textSecondary }}
+              >
+                <IoClose size={22} />
+              </button>
+              <h2 className="text-xl font-bold mb-4">Add Medical Note</h2>
+              <div className="space-y-3">
+                <select
+                  name="type"
+                  value={form.type}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded"
+                  style={{
+                    backgroundColor: isDark ? '#333' : '#fff',
+                    borderColor: theme.border,
+                    color: theme.text,
+                  }}
+                >
+                  <option value="medication">Medication</option>
+                  <option value="condition">Condition</option>
+                  <option value="procedure">Procedure</option>
+                  <option value="vaccination">Vaccination</option>
+                  <option value="allergy">Allergy</option>
+                </select>
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Name"
+                  value={form.name}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded"
+                  style={{ backgroundColor: isDark ? '#333' : '#fff', borderColor: theme.border, color: theme.text }}
+                />
+                <input
+                  type="date"
+                  name="date"
+                  value={form.date}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded"
+                  style={{ backgroundColor: isDark ? '#333' : '#fff', borderColor: theme.border, color: theme.text }}
+                />
+                <input
+                  type="text"
+                  name="doctor"
+                  placeholder="Doctor's Name"
+                  value={form.doctor}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded"
+                  style={{ backgroundColor: isDark ? '#333' : '#fff', borderColor: theme.border, color: theme.text }}
+                />
+                <input
+                  type="text"
+                  name="hospital"
+                  placeholder="Hospital"
+                  value={form.hospital}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded"
+                  style={{ backgroundColor: isDark ? '#333' : '#fff', borderColor: theme.border, color: theme.text }}
+                />
+                <textarea
+                  name="details"
+                  placeholder="Details"
+                  value={form.details}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded"
+                  rows={3}
+                  style={{ backgroundColor: isDark ? '#333' : '#fff', borderColor: theme.border, color: theme.text }}
+                />
+                <button
+                  onClick={handleAdd}
+                  className="w-full py-2 rounded font-semibold"
+                  style={{ backgroundColor: theme.primary, color: '#fff' }}
+                >
+                  Add Note
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </Layout>
   );
