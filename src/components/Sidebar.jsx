@@ -1,4 +1,3 @@
-// components/Sidebar.tsx
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FiX, FiSettings, FiUser } from 'react-icons/fi';
@@ -14,7 +13,7 @@ const menuItems = [
   { label: 'Consult a Doctor', route: '/consult-doctor' },
 ];
 
-const Sidebar = ({ open, setOpen }: { open: boolean; setOpen: (v: boolean) => void }) => {
+const Sidebar = ({ open, setOpen }) => {
   const { theme } = useTheme();
   const location = useLocation();
 
@@ -61,25 +60,17 @@ const Sidebar = ({ open, setOpen }: { open: boolean; setOpen: (v: boolean) => vo
               {item.label}
             </Link>
           ))}
+        </div>
 
-          <hr className="my-3" style={{ borderColor: theme.border }} />
-
-          <Link
-            to="/profile"
-            onClick={() => setOpen(false)}
-            className="flex items-center gap-2 text-sm"
-            style={{ color: theme.text }}
-          >
-            <FiUser /> Profile
+        {/* Footer */}
+        <div className="absolute bottom-0 w-full px-4 py-3 border-t flex items-center justify-between" style={{ borderColor: theme.border }}>
+          <Link to="/profile" className="flex items-center space-x-2" style={{ color: theme.text }}>
+            <FiUser size={18} />
+            <span>Profile</span>
           </Link>
-
-          <Link
-            to="/settings"
-            onClick={() => setOpen(false)}
-            className="flex items-center gap-2 text-sm"
-            style={{ color: theme.text }}
-          >
-            <FiSettings /> Settings
+          <Link to="/settings" className="flex items-center space-x-2" style={{ color: theme.text }}>
+            <FiSettings size={18} />
+            <span>Settings</span>
           </Link>
         </div>
       </div>

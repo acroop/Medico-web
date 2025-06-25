@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Sidebar from './Sidebar';
+import Sidebar from './Sidebar.jsx';
 import { useTheme } from '../context/ThemeContext';
 import Chatbot from './Chatbot';
 
@@ -29,7 +29,11 @@ const Layout = ({ children }) => {
       {/* Main Content (blurred if sidebar is open) */}
       <div
         className={`transition-all duration-300 ${sidebarOpen ? 'blur-sm' : ''}`}
-        style={{ minHeight: '100vh', backgroundColor: theme.background, color: theme.text }}
+        style={{
+          minHeight: '100vh',
+          backgroundColor: theme.background,
+          color: theme.text,
+        }}
       >
         {children}
       </div>

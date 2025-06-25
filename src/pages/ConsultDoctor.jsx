@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { IoVideocamOutline, IoLocationOutline } from 'react-icons/io5';
-import Layout from '../components/Layout';
+import Layout from '../components/Layout.jsx';
 
 const doctorsMock = [
 	{

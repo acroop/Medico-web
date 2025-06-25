@@ -16,7 +16,7 @@ import {
 import { useTheme } from '../context/ThemeContext';
 import Card from '../components/Card';
 import Button from '../components/Button';
-import Layout from '../components/Layout';
+import Layout from '../components/Layout.jsx';
 
 const BreastCancerAwareness = () => {
   const { theme } = useTheme();

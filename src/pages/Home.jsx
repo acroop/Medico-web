@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FiCalendar, FiHeart, FiClipboard } from 'react-icons/fi';
 import { IoMedicalOutline, IoRibbonOutline } from 'react-icons/io5';
 import { useTheme } from '../context/ThemeContext';
-import Layout from '../components/Layout';
+import Layout from '../components/Layout.jsx';
 
 const HomeScreen = () => {
   const navigate = useNavigate();

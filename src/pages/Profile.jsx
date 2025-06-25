@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import Card from '../components/Card';
-import Layout from '../components/Layout';
+import Layout from '../components/Layout.jsx';
 
 const InputField = ({ label, value, onChange, placeholder, type = "text" }) => {
   const { theme } = useTheme();

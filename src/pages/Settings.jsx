@@ -17,7 +17,7 @@ import {
   LogOut, 
   ChevronRight 
 } from 'lucide-react';
-import Layout from '../components/Layout';
+import Layout from '../components/Layout.jsx';
 import { useTheme } from '../context/ThemeContext';
 
 const SettingsScreen = () => {

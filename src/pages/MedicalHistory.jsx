@@ -10,7 +10,7 @@ import {
   IoShieldCheckmarkOutline,
   IoAlertCircleOutline,
 } from 'react-icons/io5';
-import Layout from '../components/Layout';
+import Layout from '../components/Layout.jsx';
 import { useTheme } from '../context/ThemeContext';
 import Card from '../components/Card';
 

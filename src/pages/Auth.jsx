@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import InputField from '../components/InputField';
 import Button from '../components/Button';
-import Layout from '../components/Layout';
+import Layout from '../components/Layout.jsx';
 
 const Auth = () => {
   const navigate = useNavigate();

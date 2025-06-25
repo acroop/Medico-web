@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Activity, Apple, Bed, Plus, FileText, Video, Mic, Link, CheckCircle, Eye, EyeOff, ChevronRight } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import Card from '../components/Card';
-import Layout from '../components/Layout';
+import Layout from '../components/Layout.jsx';
 
 const PCOSManagementScreen = () => {
   const { theme } = useTheme();

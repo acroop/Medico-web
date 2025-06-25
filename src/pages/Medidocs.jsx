@@ -8,7 +8,7 @@ import {
   IoExitOutline,
   IoSearchOutline,
 } from 'react-icons/io5';
-import Layout from '../components/Layout';
+import Layout from '../components/Layout.jsx';
 
 const mockDocuments = [
   {

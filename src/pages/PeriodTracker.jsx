@@ -6,7 +6,7 @@ import { IoInformationCircleOutline, IoAdd } from 'react-icons/io5';
 import { useTheme } from '../context/ThemeContext';
 import Button from '../components/Button';
 import Card from '../components/Card';
-import Layout from '../components/Layout';
+import Layout from '../components/Layout.jsx';
 import '../styles/Calendar.css';
 
 

@@ -11,7 +11,7 @@ import {
   CartesianGrid,
   Tooltip
 } from 'recharts';
-import Layout from '../components/Layout';
+import Layout from '../components/Layout.jsx';
 
 
 const mockPregnancyData = {
