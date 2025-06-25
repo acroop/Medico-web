@@ -68,8 +68,10 @@ const HomeScreen = () => {
               </p>
             </div>
             <div
+              onClick={() => navigate('/profile')}
               className="w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold"
               style={{ backgroundColor: theme.primary }}
+              title="Go to Profile"
             >
               S
             </div>

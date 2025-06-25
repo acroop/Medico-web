@@ -1,35 +1,25 @@
 import React, { useState } from 'react';
-import { Calendar, Info, Shield, Heart, Book, FileText, Video, Users, Activity, ChevronRight, CheckCircle, XCircle } from 'lucide-react';
-
-const Card = ({ title, icon, children }) => (
-  <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6 border border-gray-200 dark:border-gray-700">
-    <div className="flex items-center gap-2 mb-4">
-      {icon}
-      <h2 className="text-lg font-semibold text-gray-800 dark:text-white">{title}</h2>
-    </div>
-    {children}
-  </div>
-);
-
-const Button = ({ title, onPress, type = "primary", className = "" }) => {
-  const baseStyles = "px-4 py-2 rounded-lg font-medium transition-colors duration-200 w-full";
-  const styles = {
-    primary: "bg-pink-500 text-white hover:bg-pink-600",
-    secondary: "bg-gray-200 text-gray-800 hover:bg-gray-300 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600",
-    outline: "border-2 border-pink-500 text-pink-500 hover:bg-pink-50 dark:hover:bg-pink-900/20"
-  };
-  
-  return (
-    <button 
-      onClick={onPress}
-      className={`${baseStyles} ${styles[type]} ${className}`}
-    >
-      {title}
-    </button>
-  );
-};
+import {
+  Calendar,
+  Info,
+  Shield,
+  Heart,
+  Book,
+  FileText,
+  Video,
+  Users,
+  Activity,
+  ChevronRight,
+  CheckCircle,
+  XCircle,
+} from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
+import Card from '../components/Card';
+import Button from '../components/Button';
 
 const BreastCancerAwareness = () => {
+  const { theme } = useTheme();
+
   const [reminders, setReminders] = useState([
     {
       id: '1',
@@ -43,7 +33,7 @@ const BreastCancerAwareness = () => {
   const today = new Date();
   const daysUntilNextCheck = Math.max(
     0,
-    Math.ceil((nextDate - today) / (1000 * 60 * 60 * 24))
+    Math.ceil((nextDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
   );
 
   const riskFactors = [
@@ -56,11 +46,13 @@ const BreastCancerAwareness = () => {
   ];
 
   const presentCount = riskFactors.filter((f) => f.present).length;
-  const riskLevel = presentCount >= 3 ? 'High' : presentCount >= 1 ? 'Moderate' : 'Low';
+  const riskLevel =
+    presentCount >= 3 ? 'High' : presentCount >= 1 ? 'Moderate' : 'Low';
+
   const riskColor = {
-    High: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300',
-    Moderate: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300',
-    Low: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300',
+    High: 'text-red-700 bg-red-100 dark:text-red-300 dark:bg-red-900/30',
+    Moderate: 'text-yellow-700 bg-yellow-100 dark:text-yellow-300 dark:bg-yellow-900/30',
+    Low: 'text-green-700 bg-green-100 dark:text-green-300 dark:bg-green-900/30',
   }[riskLevel];
 
   const completeCheck = () => {
@@ -75,35 +67,49 @@ const BreastCancerAwareness = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white px-4 py-6 max-w-4xl mx-auto">
+    <div
+      className="min-h-screen px-4 py-6 max-w-4xl mx-auto"
+      style={{ backgroundColor: theme.background, color: theme.text }}
+    >
+      {/* Header */}
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">Breast Cancer Awareness</h1>
-        <p className="text-lg text-gray-600 dark:text-gray-400">Early detection saves lives</p>
+        <h1 className="text-4xl font-bold mb-2" style={{ color: theme.text }}>
+          Breast Cancer Awareness
+        </h1>
+        <p style={{ color: theme.textSecondary }}>Early detection saves lives</p>
       </div>
 
       {/* Self-Exam Reminder */}
       <Card title="Self-Examination Reminder" icon={<Calendar size={24} className="text-pink-500" />}>
         <div className="flex items-center gap-6 mb-6">
-          <div className="w-24 h-24 rounded-full border-4 border-pink-500 flex items-center justify-center bg-gradient-to-br from-pink-50 to-pink-100 dark:from-pink-900/20 dark:to-pink-800/20">
-            <div className={`w-20 h-20 rounded-full flex flex-col items-center justify-center text-white font-bold ${daysUntilNextCheck <= 3 ? 'bg-pink-500' : 'bg-gray-400'}`}>
+          <div className="w-24 h-24 rounded-full border-4 border-pink-500 flex items-center justify-center bg-pink-100 dark:bg-pink-900/20">
+            <div
+              className={`w-20 h-20 rounded-full flex flex-col items-center justify-center text-white font-bold ${
+                daysUntilNextCheck <= 3 ? 'bg-pink-500' : 'bg-gray-400'
+              }`}
+            >
               <span className="text-2xl">{daysUntilNextCheck}</span>
               <span className="text-xs">days</span>
             </div>
           </div>
           <div className="flex-1">
-            <h3 className="text-xl font-semibold mb-2 text-gray-800 dark:text-white">
-              {daysUntilNextCheck === 0 ? 'Self-check is due today!' : 'Days until next self-check'}
+            <h3 className="text-xl font-semibold mb-2" style={{ color: theme.text }}>
+              {daysUntilNextCheck === 0
+                ? 'Self-check is due today!'
+                : 'Days until next self-check'}
             </h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-3">
+            <p className="mb-3" style={{ color: theme.textSecondary }}>
               Next check: {nextDate.toDateString()}
             </p>
             <div className="flex items-center gap-3">
-              <span className="text-sm text-gray-500 dark:text-gray-400">Your streak:</span>
+              <span className="text-sm" style={{ color: theme.textSecondary }}>Your streak:</span>
               <div className="flex gap-1">
                 {reminders[0]?.completed.map((done, idx) => (
-                  <div 
-                    key={idx} 
-                    className={`w-4 h-4 rounded-full ${done ? 'bg-green-500' : 'bg-gray-300 dark:bg-gray-600'}`} 
+                  <div
+                    key={idx}
+                    className={`w-4 h-4 rounded-full ${
+                      done ? 'bg-green-500' : 'bg-gray-300 dark:bg-gray-600'
+                    }`}
                   />
                 ))}
               </div>
@@ -115,7 +121,7 @@ const BreastCancerAwareness = () => {
 
       {/* How-To Section */}
       <Card title="How to Perform a Self-Exam" icon={<Info size={24} className="text-pink-500" />}>
-        <p className="text-gray-600 dark:text-gray-400 mb-6">
+        <p className="mb-6" style={{ color: theme.textSecondary }}>
           Follow these steps to perform a breast self-examination:
         </p>
         {[
@@ -125,33 +131,39 @@ const BreastCancerAwareness = () => {
           ['Check for Discharge', 'Gently squeeze nipples to check for discharge.'],
         ].map(([title, desc], idx) => (
           <div key={idx} className="flex items-start gap-4 mb-6">
-            <div className="w-8 h-8 rounded-full bg-pink-500 text-white flex items-center justify-center font-bold text-sm flex-shrink-0">
+            <div className="w-8 h-8 rounded-full bg-pink-500 text-white flex items-center justify-center font-bold text-sm">
               {idx + 1}
             </div>
             <div>
-              <h4 className="font-semibold text-gray-800 dark:text-white mb-1">{title}</h4>
-              <p className="text-gray-600 dark:text-gray-400">{desc}</p>
+              <h4 className="font-semibold mb-1" style={{ color: theme.text }}>{title}</h4>
+              <p style={{ color: theme.textSecondary }}>{desc}</p>
             </div>
           </div>
         ))}
-        <Button title="Watch Video Tutorial" type="secondary" />
+        <a href="https://www.youtube.com/watch?v=u-LzRJQJn3Q" target="_blank" rel="noopener noreferrer" className="block mt-4">
+          <Button title="Watch Video Tutorial" type="secondary" />
+        </a>
       </Card>
 
       {/* Risk Assessment */}
       <Card title="Risk Assessment" icon={<Shield size={24} className="text-pink-500" />}>
         <div className="flex items-center gap-4 mb-4">
-          <span className="text-gray-700 dark:text-gray-300">Your Risk Level:</span>
+          <span style={{ color: theme.textSecondary }}>Your Risk Level:</span>
           <span className={`px-4 py-2 rounded-full text-sm font-semibold ${riskColor}`}>
             {riskLevel}
           </span>
         </div>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mb-6 italic">
+        <p className="text-sm italic mb-6" style={{ color: theme.textSecondary }}>
           Based on your inputs. Consult your doctor for professional assessment.
         </p>
         <div className="space-y-3">
           {riskFactors.map((item, idx) => (
-            <div key={idx} className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg">
-              <span className="text-gray-700 dark:text-gray-300">{item.factor}</span>
+            <div
+              key={idx}
+              className="flex items-center justify-between p-3 rounded-lg"
+              style={{ border: `1px solid ${theme.border}` }}
+            >
+              <span>{item.factor}</span>
               {item.present ? (
                 <CheckCircle size={20} className="text-red-500" />
               ) : (
@@ -165,19 +177,23 @@ const BreastCancerAwareness = () => {
         </div>
       </Card>
 
-      {/* Screening */}
+      {/* Screening Recommendations */}
       <Card title="Screening Recommendations" icon={<Heart size={24} className="text-pink-500" />}>
         <div className="space-y-4">
           {[
-            ['Clinical Breast Exam', 'Every 1-3 years for women in their 20s/30s, annually after 40.', Calendar],
+            ['Clinical Breast Exam', 'Every 1–3 years for women in their 20s/30s, annually after 40.', Calendar],
             ['Mammogram', 'Annually for women 45+, optional from 40.', Activity],
             ['MRI', 'For high-risk women, done with mammogram.', Shield],
           ].map(([title, desc, IconComponent], idx) => (
-            <div key={idx} className="flex items-start gap-4 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
-              <IconComponent className="text-pink-500 mt-1 flex-shrink-0" size={20} />
+            <div
+              key={idx}
+              className="flex items-start gap-4 p-4 rounded-lg"
+              style={{ backgroundColor: theme.inputBackground }}
+            >
+              <IconComponent className="text-pink-500 mt-1" size={20} />
               <div>
-                <h4 className="font-semibold text-gray-800 dark:text-white mb-1">{title}</h4>
-                <p className="text-gray-600 dark:text-gray-400">{desc}</p>
+                <h4 className="font-semibold mb-1" style={{ color: theme.text }}>{title}</h4>
+                <p style={{ color: theme.textSecondary }}>{desc}</p>
               </div>
             </div>
           ))}
@@ -196,10 +212,14 @@ const BreastCancerAwareness = () => {
             ['Support Groups Near You', Users],
             ['Lifestyle and Prevention', Activity],
           ].map(([title, IconComponent], idx) => (
-            <div key={idx} className="flex items-center justify-between bg-gray-50 dark:bg-gray-800 px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer transition-colors duration-200">
+            <div
+              key={idx}
+              className="flex items-center justify-between px-4 py-3 rounded-lg cursor-pointer transition-colors duration-200"
+              style={{ backgroundColor: theme.inputBackground }}
+            >
               <div className="flex items-center gap-3">
                 <IconComponent className="text-pink-500" size={20} />
-                <span className="text-gray-700 dark:text-gray-300">{title}</span>
+                <span>{title}</span>
               </div>
               <ChevronRight className="text-gray-400" size={20} />
             </div>
