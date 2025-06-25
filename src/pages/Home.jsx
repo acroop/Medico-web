@@ -53,6 +53,12 @@ const HomeScreen = () => {
       route: '/consult-doctor',
       description: 'Connect with healthcare providers specializing in women’s health.',
     },
+    {
+      title: 'MediDocs',
+      icon: <FiClipboard size={20} />,
+      route: '/medidocs',
+      description: 'Upload, view, and manage your medical documents securely.',
+    },
   ];
 
   return (

@@ -10,6 +10,7 @@ const menuItems = [
   { label: 'Pregnancy Tracker', route: '/pregnancy-tracker' },
   { label: 'Breast Cancer Awareness', route: '/breast-cancer-awareness' },
   { label: 'Medical Records', route: '/medical-history' },
+  { label: 'MediDocs', route: '/medidocs' },
   { label: 'Consult a Doctor', route: '/consult-doctor' },
 ];
 
@@ -60,15 +61,12 @@ const Sidebar = ({ open, setOpen }) => {
               {item.label}
             </Link>
           ))}
-        </div>
-
-        {/* Footer */}
-        <div className="absolute bottom-0 w-full px-4 py-3 border-t flex items-center justify-between" style={{ borderColor: theme.border }}>
-          <Link to="/profile" className="flex items-center space-x-2" style={{ color: theme.text }}>
+          <hr className="my-3" style={{ borderColor: theme.border }} />
+          <Link to="/profile" className="flex items-center space-x-2 px-2 py-1 rounded hover:opacity-80" style={{ color: theme.text }} onClick={() => setOpen(false)}>
             <FiUser size={18} />
             <span>Profile</span>
           </Link>
-          <Link to="/settings" className="flex items-center space-x-2" style={{ color: theme.text }}>
+          <Link to="/settings" className="flex items-center space-x-2 px-2 py-1 rounded hover:opacity-80" style={{ color: theme.text }} onClick={() => setOpen(false)}>
             <FiSettings size={18} />
             <span>Settings</span>
           </Link>

@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import {
   IoPersonOutline,
   IoBusinessOutline,
-  IoAdd,
   IoClose,
+  IoAdd,
   IoMedkitOutline,
   IoFitnessOutline,
   IoMedicalOutline,
@@ -63,11 +63,11 @@ const initialRecords = [
 ];
 
 const iconMap = {
-  medication: 'MedkitOutline',
-  condition: 'FitnessOutline',
-  procedure: 'MedicalOutline',
-  vaccination: 'ShieldCheckmarkOutline',
-  allergy: 'AlertCircleOutline',
+  medication: <IoMedkitOutline />,
+  condition: <IoFitnessOutline />,
+  procedure: <IoMedicalOutline />,
+  vaccination: <IoShieldCheckmarkOutline />,
+  allergy: <IoAlertCircleOutline />,
 };
 
 const MedicalHistoryScreen = () => {
@@ -120,6 +120,7 @@ const MedicalHistoryScreen = () => {
             Manage your health history
           </p>
 
+          {/* Existing Records */}
           {records.map((record) => (
             <Card
               key={record.id}
@@ -127,7 +128,10 @@ const MedicalHistoryScreen = () => {
               subtitle={`Date: ${new Date(record.date).toLocaleDateString('en-US')}`}
               icon={iconMap[record.type]}
               footer={
-                <div className="flex justify-between items-center text-sm" style={{ color: theme.textSecondary }}>
+                <div
+                  className="flex justify-between items-center text-sm"
+                  style={{ color: theme.textSecondary }}
+                >
                   <div className="flex gap-2">
                     {record.doctor && (
                       <span className="flex items-center gap-1">
@@ -151,26 +155,21 @@ const MedicalHistoryScreen = () => {
               <p className="text-sm">{record.details}</p>
             </Card>
           ))}
+
+          {/* Add Medical Note Card */}
+          <Card
+            title="Add Medical Note"
+            icon={<IoAdd size={24} className="text-green-500" />}
+            onClick={() => setShowModal(true)}
+            className="cursor-pointer hover:shadow-md transition duration-300 border-2 border-dashed border-green-500"
+          >
+            <p className="text-sm" style={{ color: theme.textSecondary }}>
+              Click here to add a new medical record to your history.
+            </p>
+          </Card>
         </div>
 
-        {/* Floating Add Button */}
-        <button
-          onClick={() => setShowModal(true)}
-          style={{
-            backgroundColor: theme.primary,
-            color: '#fff',
-            position: 'fixed',
-            bottom: 24,
-            right: 24,
-            padding: 16,
-            borderRadius: '9999px',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
-          }}
-        >
-          <IoAdd size={24} />
-        </button>
-
-        {/* Modal for Adding Record */}
+        {/* Modal */}
         {showModal && (
           <div
             className="fixed inset-0 z-50 flex justify-center items-center"

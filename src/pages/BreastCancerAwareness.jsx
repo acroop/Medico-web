@@ -18,9 +18,17 @@ import Card from '../components/Card';
 import Button from '../components/Button';
 import Layout from '../components/Layout.jsx';
 
+const initialRiskFactors = [
+  { factor: 'Family History', present: true, weight: 2 },
+  { factor: 'Age over 50', present: false, weight: 2 },
+  { factor: 'Early Menstruation', present: true, weight: 1 },
+  { factor: 'Late Menopause', present: false, weight: 1 },
+  { factor: 'Previous Chest Radiation', present: false, weight: 2 },
+  { factor: 'Dense Breast Tissue', present: true, weight: 1 },
+];
+
 const BreastCancerAwareness = () => {
   const { theme } = useTheme();
-
   const [reminders, setReminders] = useState([
     {
       id: '1',
@@ -29,6 +37,8 @@ const BreastCancerAwareness = () => {
       completed: [true, false, true, true, false, true],
     },
   ]);
+  const [riskFactors, setRiskFactors] = useState(initialRiskFactors);
+  const [editing, setEditing] = useState(false);
 
   const nextDate = new Date(reminders[0]?.nextDate || '');
   const today = new Date();
@@ -37,19 +47,19 @@ const BreastCancerAwareness = () => {
     Math.ceil((nextDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
   );
 
-  const riskFactors = [
-    { factor: 'Family History', present: true },
-    { factor: 'Age over 50', present: false },
-    { factor: 'Early Menstruation', present: true },
-    { factor: 'Late Menopause', present: false },
-    { factor: 'Previous Chest Radiation', present: false },
-    { factor: 'Dense Breast Tissue', present: true },
-  ];
+  // Real-world risk logic: family history, age over 50, previous chest radiation = high risk; 2+ moderate = moderate, else low
+  function calculateRiskLevel(factors) {
+    const highRisk = factors.find(f => f.factor === 'Family History' && f.present) ||
+      factors.find(f => f.factor === 'Age over 50' && f.present) ||
+      factors.find(f => f.factor === 'Previous Chest Radiation' && f.present);
+    if (highRisk) return 'High';
+    const moderateCount = factors.filter(f => f.present).length;
+    if (moderateCount >= 2) return 'Moderate';
+    if (moderateCount === 1) return 'Low';
+    return 'Low';
+  }
 
-  const presentCount = riskFactors.filter((f) => f.present).length;
-  const riskLevel =
-    presentCount >= 3 ? 'High' : presentCount >= 1 ? 'Moderate' : 'Low';
-
+  const riskLevel = calculateRiskLevel(riskFactors);
   const riskColor = {
     High: 'text-red-700 bg-red-100 dark:text-red-300 dark:bg-red-900/30',
     Moderate: 'text-yellow-700 bg-yellow-100 dark:text-yellow-300 dark:bg-yellow-900/30',
@@ -65,6 +75,20 @@ const BreastCancerAwareness = () => {
     updated.nextDate = next.toISOString().split('T')[0];
 
     setReminders([updated]);
+  };
+
+  const handleToggleFactor = idx => {
+    if (!editing) return;
+    // Use a new array to force state update
+    setRiskFactors(factors => {
+      const updated = [...factors];
+      updated[idx] = { ...updated[idx], present: !updated[idx].present };
+      return updated;
+    });
+  };
+
+  const handleEditOrSave = () => {
+    setEditing(editing => !editing);
   };
 
   return (
@@ -162,11 +186,16 @@ const BreastCancerAwareness = () => {
             {riskFactors.map((item, idx) => (
               <div
                 key={idx}
-                className="flex items-center justify-between p-3 rounded-lg"
+                className={`flex items-center justify-between p-3 rounded-lg transition-colors duration-200 ${editing ? 'hover:bg-pink-50 dark:hover:bg-pink-900/10 cursor-pointer' : ''}`}
                 style={{ border: `1px solid ${theme.border}` }}
+                onClick={() => { if (editing) handleToggleFactor(idx); }}
               >
                 <span>{item.factor}</span>
-                {item.present ? (
+                {editing ? (
+                  <span className={`px-3 py-1 rounded-full text-xs font-semibold ${item.present ? 'bg-pink-500 text-white' : 'bg-gray-200 text-gray-700'}`}>
+                    {item.present ? 'Yes' : 'No'}
+                  </span>
+                ) : item.present ? (
                   <CheckCircle size={20} className="text-red-500" />
                 ) : (
                   <XCircle size={20} className="text-green-500" />
@@ -175,7 +204,32 @@ const BreastCancerAwareness = () => {
             ))}
           </div>
           <div className="mt-6">
-            <Button title="Update Risk Factors" type="outline" />
+            <button
+              type="button"
+              className="px-4 py-2 rounded bg-pink-500 text-white font-semibold hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-400"
+              onClick={handleEditOrSave}
+            >
+              {editing ? 'Save Risk Factors' : 'Update Risk Factors'}
+            </button>
+          </div>
+        </Card>
+
+        {/* AI Tumor Detection Card */}
+        <Card title="AI Breast Ultrasound Tumor Checker" icon={<Shield size={24} className="text-blue-500" />}>
+          <div className="mb-4">
+            <p style={{ color: theme.textSecondary }}>
+              Unsure about your ultrasound image? Use our AI-powered tool to check if your breast ultrasound image shows signs of a tumor. This tool uses advanced deep learning to assist in early detection. <span className="font-semibold" style={{ color: theme.primary }}>For informational purposes only.</span>
+            </p>
+          </div>
+          <div className="flex justify-start">
+            <a
+              href="https://huggingface.co/spaces/SoumiliSaha/BreastCancerAI"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block"
+            >
+              <Button title="Check Ultrasound Image Here" type="secondary" />
+            </a>
           </div>
         </Card>
 
@@ -185,7 +239,7 @@ const BreastCancerAwareness = () => {
             {[
               ['Clinical Breast Exam', 'Every 1–3 years for women in their 20s/30s, annually after 40.', Calendar],
               ['Mammogram', 'Annually for women 45+, optional from 40.', Activity],
-              ['MRI', 'For high-risk women, done with mammogram.', Shield],
+              ['Ultrasonography', 'Recommended for women under 40 or with dense breast tissue; often used alongside mammograms for clearer imaging.', Shield],
             ].map(([title, desc, IconComponent], idx) => (
               <div
                 key={idx}
@@ -200,34 +254,9 @@ const BreastCancerAwareness = () => {
               </div>
             ))}
           </div>
-          <div className="mt-6">
-            <Button title="Schedule Screening" />
-          </div>
         </Card>
 
-        {/* Educational Resources */}
-        <Card title="Educational Resources" icon={<Book size={24} className="text-pink-500" />}>
-          <div className="space-y-2">
-            {[
-              ['Understanding Breast Cancer', FileText],
-              ['Early Detection Video Series', Video],
-              ['Support Groups Near You', Users],
-              ['Lifestyle and Prevention', Activity],
-            ].map(([title, IconComponent], idx) => (
-              <div
-                key={idx}
-                className="flex items-center justify-between px-4 py-3 rounded-lg cursor-pointer transition-colors duration-200"
-                style={{ backgroundColor: theme.inputBackground }}
-              >
-                <div className="flex items-center gap-3">
-                  <IconComponent className="text-pink-500" size={20} />
-                  <span>{title}</span>
-                </div>
-                <ChevronRight className="text-gray-400" size={20} />
-              </div>
-            ))}
-          </div>
-        </Card>
+        
       </div>
     </Layout>
   );

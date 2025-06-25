@@ -9,6 +9,7 @@ import {
   IoSearchOutline,
 } from 'react-icons/io5';
 import Layout from '../components/Layout.jsx';
+import { useTheme } from '../context/ThemeContext.jsx';
 
 const mockDocuments = [
   {
@@ -52,6 +53,7 @@ const iconMap = {
 const MedidocsScreen = () => {
   const [search, setSearch] = useState('');
   const [isModalOpen, setModalOpen] = useState(false);
+  const { theme } = useTheme();
 
   const filteredDocs = mockDocuments.filter(doc =>
     doc.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -65,14 +67,20 @@ const MedidocsScreen = () => {
 
   return (
     <Layout>
-      <div className="p-6 max-w-4xl mx-auto">
+      <div className="p-6 max-w-4xl mx-auto" style={{ background: theme.background, minHeight: '100vh' }}>
         {/* Header */}
         <div className="flex items-center gap-4 mb-6">
           <div className="relative w-full">
-            <IoSearchOutline className="absolute left-3 top-3 text-gray-400" />
+            <IoSearchOutline className="absolute left-3 top-3" style={{ color: theme.textSecondary }} />
             <input
               type="text"
-              className="w-full pl-10 pr-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring focus:border-blue-400"
+              className="w-full pl-10 pr-4 py-2 rounded-md border focus:outline-none focus:ring"
+              style={{
+                background: theme.surface,
+                color: theme.text,
+                borderColor: theme.border,
+                boxShadow: 'none',
+              }}
               placeholder="Search documents..."
               value={search}
               onChange={e => setSearch(e.target.value)}
@@ -80,7 +88,15 @@ const MedidocsScreen = () => {
           </div>
           <button
             onClick={() => setModalOpen(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium"
+            className="px-4 py-2 rounded-md font-medium"
+            style={{
+              background: theme.primary,
+              color: theme.text,
+              border: 'none',
+              transition: 'background 0.2s',
+            }}
+            onMouseOver={e => e.currentTarget.style.background = theme.secondary}
+            onMouseOut={e => e.currentTarget.style.background = theme.primary}
           >
             Upload
           </button>
@@ -92,22 +108,28 @@ const MedidocsScreen = () => {
             filteredDocs.map(doc => (
               <div
                 key={doc.id}
-                className="bg-white shadow rounded-lg p-4 border border-gray-200"
+                className="shadow rounded-lg p-4 border"
+                style={{
+                  background: theme.card,
+                  borderColor: theme.border,
+                  color: theme.text,
+                  boxShadow: theme.isDark ? '0 2px 8px rgba(0,0,0,0.6)' : '0 2px 8px rgba(0,0,0,0.08)'
+                }}
               >
                 <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-2 text-blue-600 text-xl">
+                  <div className="flex items-center gap-2 text-xl" style={{ color: theme.primary }}>
                     {iconMap[doc.type] || iconMap.other}
-                    <h2 className="text-lg font-semibold text-gray-800">{doc.name}</h2>
+                    <h2 className="text-lg font-semibold" style={{ color: theme.text }}>{doc.name}</h2>
                   </div>
-                  <span className="text-sm text-gray-500">{formatDate(doc.date)}</span>
+                  <span className="text-sm" style={{ color: theme.textSecondary }}>{formatDate(doc.date)}</span>
                 </div>
-                <p className="text-sm text-gray-600 mb-1">{doc.type.charAt(0).toUpperCase() + doc.type.slice(1)}</p>
-                <p className="text-sm text-gray-500">{doc.notes}</p>
+                <p className="text-sm mb-1" style={{ color: theme.accent, fontWeight: 500 }}>{doc.type.charAt(0).toUpperCase() + doc.type.slice(1)}</p>
+                <p className="text-sm" style={{ color: theme.textSecondary }}>{doc.notes}</p>
               </div>
             ))
           ) : (
-            <div className="text-center text-gray-500 mt-20">
-              <IoDocumentTextOutline className="mx-auto text-6xl mb-4" />
+            <div className="text-center mt-20" style={{ color: theme.textSecondary }}>
+              <IoDocumentTextOutline className="mx-auto text-6xl mb-4" style={{ color: theme.disabled }} />
               <p>No documents found. Upload a new document to get started.</p>
             </div>
           )}
@@ -115,24 +137,28 @@ const MedidocsScreen = () => {
 
         {/* Upload Modal */}
         {isModalOpen && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white rounded-md shadow-lg p-6 w-full max-w-md">
+          <div className="fixed inset-0 flex items-center justify-center z-50" style={{ background: 'rgba(0,0,0,0.5)' }}>
+            <div className="rounded-md shadow-lg p-6 w-full max-w-md" style={{ background: theme.card, color: theme.text }}>
               <h3 className="text-xl font-semibold mb-4">Upload New Document</h3>
-              <input className="w-full border border-gray-300 rounded-md px-3 py-2 mb-3" placeholder="Document Name" />
-              <input className="w-full border border-gray-300 rounded-md px-3 py-2 mb-3" placeholder="Document Type" />
-              <input className="w-full border border-gray-300 rounded-md px-3 py-2 mb-3" placeholder="Date" />
-              <textarea className="w-full border border-gray-300 rounded-md px-3 py-2 mb-4" placeholder="Notes (Optional)" rows={3}></textarea>
-              <button className="w-full flex items-center justify-center gap-2 border border-dashed border-gray-400 py-2 mb-4 rounded-md text-gray-600">
+              <input className="w-full rounded-md px-3 py-2 mb-3 border" style={{ background: theme.surface, color: theme.text, borderColor: theme.border }} placeholder="Document Name" />
+              <input className="w-full rounded-md px-3 py-2 mb-3 border" style={{ background: theme.surface, color: theme.text, borderColor: theme.border }} placeholder="Document Type" />
+              <input className="w-full rounded-md px-3 py-2 mb-3 border" style={{ background: theme.surface, color: theme.text, borderColor: theme.border }} placeholder="Date" />
+              <textarea className="w-full rounded-md px-3 py-2 mb-4 border" style={{ background: theme.surface, color: theme.text, borderColor: theme.border }} placeholder="Notes (Optional)" rows={3}></textarea>
+              <button className="w-full flex items-center justify-center gap-2 border border-dashed py-2 mb-4 rounded-md" style={{ borderColor: theme.disabled, color: theme.textSecondary, background: theme.surface }}>
                 <IoCloudUploadOutline size={20} /> Select Document to Upload
               </button>
               <div className="flex gap-3">
                 <button
-                  className="w-full border border-gray-300 py-2 rounded-md"
+                  className="w-full py-2 rounded-md border"
+                  style={{ background: theme.surface, color: theme.text, borderColor: theme.border }}
                   onClick={() => setModalOpen(false)}
                 >Cancel</button>
                 <button
-                  className="w-full bg-blue-600 text-white py-2 rounded-md"
+                  className="w-full py-2 rounded-md"
+                  style={{ background: theme.primary, color: theme.text, border: 'none' }}
                   onClick={() => alert('Upload functionality here')}
+                  onMouseOver={e => e.currentTarget.style.background = theme.secondary}
+                  onMouseOut={e => e.currentTarget.style.background = theme.primary}
                 >Upload</button>
               </div>
             </div>
