@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { IoClose, IoAdd, IoSearch, IoDocumentText, IoCalendar, IoFitness, IoMedical, IoDocument } from 'react-icons/io5';
-import Layout from '../components/Layout.jsx';
+import Layout from '../components/Layout';
 
 const categories = [
   { id: 'all', label: 'All Notes' },

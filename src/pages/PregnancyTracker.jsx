@@ -122,234 +122,236 @@ const PregnancyTracker = () => {
 
   return (
     <Layout>
-    <div style={{ padding: '1rem', backgroundColor: theme.background, color: theme.text }}>
-      <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>Pregnancy Tracker</h1>
-      <p style={{ marginBottom: '1.5rem', color: theme.textSecondary }}>
-        Week {pregnancyData.weeksPregnant} • {daysUntilDueDate} days to go
-      </p>
+      <div className="min-h-screen px-4 py-6 flex flex-col items-center" style={{ backgroundColor: theme.background, color: theme.text }}>
+        <div className="w-full max-w-6xl mx-auto"> {/* Broader layout for consistency */}
+          <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>Pregnancy Tracker</h1>
+          <p style={{ marginBottom: '1.5rem', color: theme.textSecondary }}>
+            Week {pregnancyData.weeksPregnant} • {daysUntilDueDate} days to go
+          </p>
 
-      <Card>
-        <p style={{ color: theme.primary }}>Baby is the size of an</p>
-        <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>{pregnancyData.babySize}</h2>
-        <p style={{ color: theme.textSecondary }}>
-          Due on {dueDate.toLocaleDateString()}
-        </p>
-        <span style={{
-          backgroundColor: theme.primary,
-          color: '#fff',
-          padding: '4px 8px',
-          borderRadius: '6px',
-          display: 'inline-block',
-          marginTop: '0.5rem'
-        }}>
-          Trimester {trimester}
-        </span>
-        <div style={{
-          background: theme.border,
-          borderRadius: '4px',
-          height: '8px',
-          marginTop: '10px'
-        }}>
-          <div style={{
-            background: theme.primary,
-            height: '8px',
-            width: `${progress}%`,
-            borderRadius: '4px'
-          }}></div>
-        </div>
-        <p style={{ fontSize: '0.875rem', color: theme.textSecondary }}>
-          {pregnancyData.weeksPregnant} of 40 weeks
-        </p>
-      </Card>
-
-      {nextAppointment && (
-        <Card title="Next Appointment" icon="calendar">
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            <div style={{ fontWeight: 600, color: theme.text }}>
-              {new Date(nextAppointment.date).toLocaleDateString('en-US', {
-                month: 'long',
-                day: 'numeric'
-              })} at {nextAppointment.time}
-            </div>
-            <div style={{ color: theme.text }}>{nextAppointment.doctorName}</div>
-            <div style={{ color: theme.primary, fontWeight: 500 }}>{nextAppointment.purpose}</div>
-            {nextAppointment.notes ? (
-              <div style={{ color: theme.textSecondary, fontStyle: 'italic' }}>
-                Note: {nextAppointment.notes}
-              </div>
-            ) : null}
-            <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
-              <Button
-                title="Reschedule"
-                type="outline"
-                size="small"
-                onClick={() => handleReschedule(nextAppointment)}
-                style={{ flex: 1, borderColor: theme.primary, color: theme.primary }}
-                textStyle={{ color: theme.primary }}
-              />
-              <Button
-                title="View Details"
-                size="small"
-                onClick={() => handleViewDetails(nextAppointment)}
-                style={{ flex: 1, backgroundColor: theme.primary, color: '#fff' }}
-                textStyle={{ color: '#fff' }}
-              />
-            </div>
-          </div>
-        </Card>
-      )}
-      {/* Reschedule Modal */}
-      {showReschedule && (
-        <div style={{
-          position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
-          background: 'rgba(0,0,0,0.4)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center'
-        }}>
-          <div style={{ background: theme.card, color: theme.text, padding: 24, borderRadius: 12, minWidth: 320 }}>
-            <h3 style={{ marginBottom: 16 }}>Reschedule Appointment</h3>
-            <label style={{ display: 'block', marginBottom: 8 }}>Date:</label>
-            <input type="date" value={rescheduleDate} onChange={e => setRescheduleDate(e.target.value)} style={{ marginBottom: 16, width: '100%' }} />
-            <label style={{ display: 'block', marginBottom: 8 }}>Time:</label>
-            <input type="time" value={rescheduleTime} onChange={e => setRescheduleTime(e.target.value)} style={{ marginBottom: 16, width: '100%' }} />
-            <div style={{ display: 'flex', gap: 12, marginTop: 16 }}>
-              <Button title="Cancel" type="outline" onClick={() => setShowReschedule(false)} style={{ flex: 1 }} />
-              <Button title="Save" onClick={handleRescheduleSave} style={{ flex: 1, backgroundColor: theme.primary, color: '#fff' }} />
-            </div>
-          </div>
-        </div>
-      )}
-      {/* Details Modal */}
-      {showDetails && selectedAppointment && (
-        <div style={{
-          position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
-          background: 'rgba(0,0,0,0.4)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center'
-        }}>
-          <div style={{ background: theme.card, color: theme.text, padding: 24, borderRadius: 12, minWidth: 320, maxWidth: 400 }}>
-            <h3 style={{ marginBottom: 16 }}>Appointment Details</h3>
-            <div><b>Date:</b> {new Date(selectedAppointment.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</div>
-            <div><b>Time:</b> {selectedAppointment.time}</div>
-            <div><b>Doctor:</b> {selectedAppointment.doctorName}</div>
-            <div><b>Purpose:</b> {selectedAppointment.purpose}</div>
-            {selectedAppointment.notes && <div><b>Notes:</b> {selectedAppointment.notes}</div>}
-            <div style={{ display: 'flex', gap: 12, marginTop: 16 }}>
-              <Button title="Close" onClick={handleCloseDetails} style={{ flex: 1, backgroundColor: theme.primary, color: '#fff' }} />
-            </div>
-          </div>
-        </div>
-      )}
-      <Card title="Weight Tracking">
-        <div style={{ height: '250px', marginBottom: '1rem'}}>
-        <LineChart
-          width={1400}
-          height={250}
-          data={pregnancyData.weightTracking}
-          margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-        >
-        <CartesianGrid strokeDasharray="3 3" stroke={theme.border} />
-        <XAxis dataKey="week" tick={{ fill: theme.textSecondary }} label={{ value: 'Week', position: 'insideBottomRight', offset: -5 }} />
-        <YAxis domain={['auto', 'auto']} tick={{ fill: theme.textSecondary }} unit="kg" />
-        <Tooltip />
-        <Line type="monotone" dataKey="weight" stroke={theme.primary} strokeWidth={3} dot={{ fill: theme.primary }} />
-      </LineChart>
-      </div>
-      <div style={{ display: 'flex', gap: '1rem', justifyContent: 'space-between' }}>
-  <Button
-    title="Log Weight"
-    onClick={() => {
-      const latestWeek = pregnancyData.weightTracking[pregnancyData.weightTracking.length - 1].week;
-      const newWeight = prompt('Enter your current weight (kg):');
-      if (newWeight && !isNaN(newWeight)) {
-        const newData = [...pregnancyData.weightTracking, { week: latestWeek + 1, weight: parseFloat(newWeight) }];
-        setPregnancyData(prev => ({ ...prev, weightTracking: newData }));
-      }
-    }}
-    style={{ flex: 1, backgroundColor: theme.accent, color: '#fff', fontWeight: 'bold' }}
-  />
-  <Button
-    title="Delete Last"
-    onClick={() => {
-      if (pregnancyData.weightTracking.length > 0) {
-        const newData = pregnancyData.weightTracking.slice(0, -1); // removes last item
-        setPregnancyData(prev => ({ ...prev, weightTracking: newData }));
-      }
-    }}
-    type="outline"
-    style={{ flex: 1, borderColor: theme.danger, color: theme.danger }}
-    textStyle={{ color: theme.danger }}
-  />
-</div>
-    </Card>
-
-      <Card title="Weekly Development">
-        <h3 style={{ color: theme.primary, marginBottom: '1rem' }}>
-          Week {pregnancyData.weeksPregnant}: Key Developments
-        </h3>
-        <ul style={{ paddingLeft: 0, marginTop: '0.5rem', listStyle: 'none' }}>
-          {[
-            'Baby’s eyes can now sense light.',
-            'The baby can now make sucking movements.',
-            'Baby is about 4.5 inches long.'
-          ].map((text, idx) => (
-            <li key={idx} style={{ display: 'flex', alignItems: 'center', marginBottom: 8 }}>
-              <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 28, height: 28, borderRadius: '50%', background: theme.success + '22', marginRight: 10 }}>
-                <IoCheckmarkCircle size={18} style={{ color: theme.success }} />
-              </span>
-              <span style={{ color: theme.text, fontSize: '1rem' }}>{text}</span>
-            </li>
-          ))}
-        </ul>
-      </Card>
-
-      <Card title="Symptoms">
-        {pregnancyData.symptoms.slice(0, 3).map(s => (
-          <div key={s.id} style={{ marginBottom: '1rem' }}>
-            <p>{new Date(s.date).toDateString()}</p>
+          <Card>
+            <p style={{ color: theme.primary }}>Baby is the size of an</p>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>{pregnancyData.babySize}</h2>
             <p style={{ color: theme.textSecondary }}>
-              Level {s.intensityLevel}/10
+              Due on {dueDate.toLocaleDateString()}
             </p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-              {s.symptoms.map((sym, i) => (
-                <span key={i} style={{
-                  background: theme.primary + '20',
-                  color: theme.primary,
-                  padding: '4px 8px',
-                  borderRadius: '12px'
-                }}>
-                  {sym}
-                </span>
-              ))}
+            <span style={{
+              backgroundColor: theme.primary,
+              color: '#fff',
+              padding: '4px 8px',
+              borderRadius: '6px',
+              display: 'inline-block',
+              marginTop: '0.5rem'
+            }}>
+              Trimester {trimester}
+            </span>
+            <div style={{
+              background: theme.border,
+              borderRadius: '4px',
+              height: '8px',
+              marginTop: '10px'
+            }}>
+              <div style={{
+                background: theme.primary,
+                height: '8px',
+                width: `${progress}%`,
+                borderRadius: '4px'
+              }}></div>
             </div>
-            {s.notes && (
-              <p style={{ fontStyle: 'italic', color: theme.textSecondary }}>
-                {s.notes}
-              </p>
-            )}
+            <p style={{ fontSize: '0.875rem', color: theme.textSecondary }}>
+              {pregnancyData.weeksPregnant} of 40 weeks
+            </p>
+          </Card>
+
+          {nextAppointment && (
+            <Card title="Next Appointment" icon="calendar">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                <div style={{ fontWeight: 600, color: theme.text }}>
+                  {new Date(nextAppointment.date).toLocaleDateString('en-US', {
+                    month: 'long',
+                    day: 'numeric'
+                  })} at {nextAppointment.time}
+                </div>
+                <div style={{ color: theme.text }}>{nextAppointment.doctorName}</div>
+                <div style={{ color: theme.primary, fontWeight: 500 }}>{nextAppointment.purpose}</div>
+                {nextAppointment.notes ? (
+                  <div style={{ color: theme.textSecondary, fontStyle: 'italic' }}>
+                    Note: {nextAppointment.notes}
+                  </div>
+                ) : null}
+                <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
+                  <Button
+                    title="Reschedule"
+                    type="outline"
+                    size="small"
+                    onClick={() => handleReschedule(nextAppointment)}
+                    style={{ flex: 1, borderColor: theme.primary, color: theme.primary }}
+                    textStyle={{ color: theme.primary }}
+                  />
+                  <Button
+                    title="View Details"
+                    size="small"
+                    onClick={() => handleViewDetails(nextAppointment)}
+                    style={{ flex: 1, backgroundColor: theme.primary, color: '#fff' }}
+                    textStyle={{ color: '#fff' }}
+                  />
+                </div>
+              </div>
+            </Card>
+          )}
+          {/* Reschedule Modal */}
+          {showReschedule && (
+            <div style={{
+              position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
+              background: 'rgba(0,0,0,0.4)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center'
+            }}>
+              <div style={{ background: theme.card, color: theme.text, padding: 24, borderRadius: 12, minWidth: 320 }}>
+                <h3 style={{ marginBottom: 16 }}>Reschedule Appointment</h3>
+                <label style={{ display: 'block', marginBottom: 8 }}>Date:</label>
+                <input type="date" value={rescheduleDate} onChange={e => setRescheduleDate(e.target.value)} style={{ marginBottom: 16, width: '100%' }} />
+                <label style={{ display: 'block', marginBottom: 8 }}>Time:</label>
+                <input type="time" value={rescheduleTime} onChange={e => setRescheduleTime(e.target.value)} style={{ marginBottom: 16, width: '100%' }} />
+                <div style={{ display: 'flex', gap: 12, marginTop: 16 }}>
+                  <Button title="Cancel" type="outline" onClick={() => setShowReschedule(false)} style={{ flex: 1 }} />
+                  <Button title="Save" onClick={handleRescheduleSave} style={{ flex: 1, backgroundColor: theme.primary, color: '#fff' }} />
+                </div>
+              </div>
+            </div>
+          )}
+          {/* Details Modal */}
+          {showDetails && selectedAppointment && (
+            <div style={{
+              position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
+              background: 'rgba(0,0,0,0.4)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center'
+            }}>
+              <div style={{ background: theme.card, color: theme.text, padding: 24, borderRadius: 12, minWidth: 320, maxWidth: 400 }}>
+                <h3 style={{ marginBottom: 16 }}>Appointment Details</h3>
+                <div><b>Date:</b> {new Date(selectedAppointment.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</div>
+                <div><b>Time:</b> {selectedAppointment.time}</div>
+                <div><b>Doctor:</b> {selectedAppointment.doctorName}</div>
+                <div><b>Purpose:</b> {selectedAppointment.purpose}</div>
+                {selectedAppointment.notes && <div><b>Notes:</b> {selectedAppointment.notes}</div>}
+                <div style={{ display: 'flex', gap: 12, marginTop: 16 }}>
+                  <Button title="Close" onClick={handleCloseDetails} style={{ flex: 1, backgroundColor: theme.primary, color: '#fff' }} />
+                </div>
+              </div>
+            </div>
+          )}
+          <Card title="Weight Tracking">
+            <div style={{ height: '250px', marginBottom: '1rem'}}>
+            <LineChart
+              width={1100}
+              height={250}
+              data={pregnancyData.weightTracking}
+              margin={{ top: 10, right: 20, left: 0, bottom: 0 }}
+            >
+            <CartesianGrid strokeDasharray="3 3" stroke={theme.border} />
+            <XAxis dataKey="week" tick={{ fill: theme.textSecondary }} label={{ value: 'Week', position: 'insideBottomRight', offset: -5 }} />
+            <YAxis domain={['auto', 'auto']} tick={{ fill: theme.textSecondary }} unit="kg" />
+            <Tooltip />
+            <Line type="monotone" dataKey="weight" stroke={theme.primary} strokeWidth={3} dot={{ fill: theme.primary }} />
+          </LineChart>
           </div>
-        ))}
-      </Card>
-
-      <Card title="Nutrition">
-        <p>Focus on key nutrients like Folic Acid, Omega-3, and Iron.</p>
-      </Card>
-
-      <button style={{
-        position: 'fixed',
-        bottom: '1.5rem',
-        right: '1.5rem',
-        width: '56px',
-        height: '56px',
-        borderRadius: '50%',
-        backgroundColor: theme.primary,
-        color: '#fff',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        border: 'none',
-        cursor: 'pointer',
-        boxShadow: '0 2px 5px rgba(0,0,0,0.25)'
-      }}>
-        <IoAdd size={24} />
-      </button>
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'space-between' }}>
+      <Button
+        title="Log Weight"
+        onClick={() => {
+          const latestWeek = pregnancyData.weightTracking[pregnancyData.weightTracking.length - 1].week;
+          const newWeight = prompt('Enter your current weight (kg):');
+          if (newWeight && !isNaN(newWeight)) {
+            const newData = [...pregnancyData.weightTracking, { week: latestWeek + 1, weight: parseFloat(newWeight) }];
+            setPregnancyData(prev => ({ ...prev, weightTracking: newData }));
+          }
+        }}
+        style={{ flex: 1, backgroundColor: theme.accent, color: '#fff', fontWeight: 'bold' }}
+      />
+      <Button
+        title="Delete Last"
+        onClick={() => {
+          if (pregnancyData.weightTracking.length > 0) {
+            const newData = pregnancyData.weightTracking.slice(0, -1); // removes last item
+            setPregnancyData(prev => ({ ...prev, weightTracking: newData }));
+          }
+        }}
+        type="outline"
+        style={{ flex: 1, borderColor: theme.danger, color: theme.danger }}
+        textStyle={{ color: theme.danger }}
+      />
     </div>
+          </Card>
+
+          <Card title="Weekly Development">
+            <h3 style={{ color: theme.primary, marginBottom: '1rem' }}>
+              Week {pregnancyData.weeksPregnant}: Key Developments
+            </h3>
+            <ul style={{ paddingLeft: 0, marginTop: '0.5rem', listStyle: 'none' }}>
+              {[
+                'Baby’s eyes can now sense light.',
+                'The baby can now make sucking movements.',
+                'Baby is about 4.5 inches long.'
+              ].map((text, idx) => (
+                <li key={idx} style={{ display: 'flex', alignItems: 'center', marginBottom: 8 }}>
+                  <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 28, height: 28, borderRadius: '50%', background: theme.success + '22', marginRight: 10 }}>
+                    <IoCheckmarkCircle size={18} style={{ color: theme.success }} />
+                  </span>
+                  <span style={{ color: theme.text, fontSize: '1rem' }}>{text}</span>
+                </li>
+              ))}
+            </ul>
+          </Card>
+
+          <Card title="Symptoms">
+            {pregnancyData.symptoms.slice(0, 3).map(s => (
+              <div key={s.id} style={{ marginBottom: '1rem' }}>
+                <p>{new Date(s.date).toDateString()}</p>
+                <p style={{ color: theme.textSecondary }}>
+                  Level {s.intensityLevel}/10
+                </p>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                  {s.symptoms.map((sym, i) => (
+                    <span key={i} style={{
+                      background: theme.primary + '20',
+                      color: theme.primary,
+                      padding: '4px 8px',
+                      borderRadius: '12px'
+                    }}>
+                      {sym}
+                    </span>
+                  ))}
+                </div>
+                {s.notes && (
+                  <p style={{ fontStyle: 'italic', color: theme.textSecondary }}>
+                    {s.notes}
+                  </p>
+                )}
+              </div>
+            ))}
+          </Card>
+
+          <Card title="Nutrition">
+            <p>Focus on key nutrients like Folic Acid, Omega-3, and Iron.</p>
+          </Card>
+
+          <button style={{
+            position: 'fixed',
+            bottom: '1.5rem',
+            right: '1.5rem',
+            width: '56px',
+            height: '56px',
+            borderRadius: '50%',
+            backgroundColor: theme.primary,
+            color: '#fff',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            border: 'none',
+            cursor: 'pointer',
+            boxShadow: '0 2px 5px rgba(0,0,0,0.25)'
+          }}>
+            <IoAdd size={24} />
+          </button>
+        </div>
+      </div>
     </Layout>
   );
 };

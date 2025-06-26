@@ -105,8 +105,8 @@ const ProfileScreen = () => {
 
   return (
     <Layout>
-      <div className="min-h-screen px-4 py-6" style={{ backgroundColor: theme.background }}>
-        <div className="max-w-2xl mx-auto">
+      <div className="min-h-screen px-4 py-6 flex flex-col items-center" style={{ backgroundColor: theme.background, color: theme.text }}>
+        <div className="w-full max-w-6xl mx-auto"> {/* Broader layout for consistency */}
 
           {/* Profile Header */}
           <div className="text-center mb-6">

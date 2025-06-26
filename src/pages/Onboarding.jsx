@@ -64,8 +64,8 @@ const OnboardingScreen = () => {
 
 	return (
 		<Layout>
-			<div className='min-h-screen flex items-center justify-center px-4 bg-[#101010] text-white'>
-				<div className='w-full max-w-xl'>
+			<div className='min-h-screen px-4 py-6 flex flex-col items-center bg-[#101010] text-white'>
+				<div className='w-full max-w-6xl mx-auto'>
 					<div className='bg-[#282828d9] backdrop-blur-md p-6 md:p-10 rounded-3xl relative'>
 						{!currentSlide === slides.length - 1 && (
 							<button
