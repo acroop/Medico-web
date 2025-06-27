@@ -56,6 +56,12 @@ const HomeScreen = () => {
       description: 'Learn about breast cancer, self-examination, and screening recommendations.',
     },
     {
+    title: 'Cervical Cancer Awareness',
+    icon: <IoRibbonOutline size={20} />,
+    route: '/cervical-cancer-awareness',
+    description: 'Understand symptoms, prevention, and early detection of cervical cancer.',
+    },
+    {
       title: 'Medical Records',
       icon: <FiClipboard size={20} />,
       route: '/medical-history',

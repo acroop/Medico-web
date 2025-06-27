@@ -33,6 +33,12 @@ const InputField = ({ label, value, onChange, placeholder, type = "text" }) => {
           border: `1px solid ${theme.border}`,
           color: theme.text,
         }}
+        // style={{
+        //   backgroundColor: theme.inputBackground || '#1f1f1f',
+        //   border: `1px solid ${theme.border || '#444'}`,
+        //   color: theme.inputText || theme.text || '#fff',
+        //   caretColor: theme.inputText || theme.text || '#fff', // Make cursor visible
+        // }}
       />
     </div>
   );

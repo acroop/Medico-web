@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
@@ -11,6 +12,7 @@ import PeriodTracker from './pages/PeriodTracker';
 import PCOSManagement from './pages/PCOSManagement';
 import PregnancyTracker from './pages/PregnancyTracker';
 import BreastCancerAwareness from './pages/BreastCancerAwareness';
+import CervicalCancerAwareness from './pages/CervicalCancerAwareness'; // ✅ New import
 import MedicalHistory from './pages/MedicalHistory';
 import Medidocs from './pages/Medidocs';
 import ConsultDoctor from './pages/ConsultDoctor';
@@ -45,6 +47,7 @@ const AppRoutes = () => (
     <Route path="/pcos-management" element={<PCOSManagement />} />
     <Route path="/pregnancy-tracker" element={<PregnancyTracker />} />
     <Route path="/breast-cancer-awareness" element={<BreastCancerAwareness />} />
+    <Route path="/cervical-cancer-awareness" element={<CervicalCancerAwareness />} /> {/* ✅ New route */}
     <Route path="/medical-history" element={<MedicalHistory />} />
     <Route path="/medidocs" element={<Medidocs />} />
     <Route path="/consult-doctor" element={<ConsultDoctor />} />
