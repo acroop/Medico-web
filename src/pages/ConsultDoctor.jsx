@@ -403,7 +403,7 @@ const ConsultDoctor = () => {
   const [isMapExpanded, setIsMapExpanded] = useState(false);
 
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: "YOUR API KEY", // Replace with your Google Maps API key
+    googleMapsApiKey: "AIzaSyCaffkrUBk4OEsmAYqGcF48LYdau-uC32E", // Replace with your Google Maps API key
     libraries: ["places"],
   });
 

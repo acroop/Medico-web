@@ -9,10 +9,12 @@ const menuItems = [
   { label: 'PCOS Management', route: '/pcos-management' },
   { label: 'Pregnancy Tracker', route: '/pregnancy-tracker' },
   { label: 'Breast Cancer Awareness', route: '/breast-cancer-awareness' },
+  { label: 'Cervical Cancer Awareness', route: '/cervical-cancer-awareness' }, // ✅ Added here
   { label: 'Medical Records', route: '/medical-history' },
   { label: 'MediDocs', route: '/medidocs' },
   { label: 'Consult a Doctor', route: '/consult-doctor' },
 ];
+
 
 const Sidebar = ({ open, setOpen }) => {
   const { theme } = useTheme();
