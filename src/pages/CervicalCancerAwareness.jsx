@@ -207,6 +207,29 @@ const CervicalCancerAwareness = () => {
             </div>
           </Card>
 
+          {/* AI Cervical Cancer Risk Predictor Card */}
+            <Card title="AI Cervical Cancer Risk Predictor" icon={<Shield size={24} className="text-pink-500" />}>
+            <div className="mb-4">
+                <p style={{ color: theme.textSecondary }}>
+                 Try our AI-powered tool that analyzes your lifestyle and health inputs to assess cervical cancer risk more accurately. 
+                <span className="font-semibold" style={{ color: theme.primary }}> Answer a few questions to get insights.</span>
+                <br />
+                <span className="text-xs italic">This tool is for educational and awareness purposes only.</span>
+                </p>
+            </div>
+            <div className="flex justify-start">
+                <a
+                href="https://huggingface.co/spaces/prsoumyajit/cervical-cancer-predictor"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block"
+                >
+                <Button title="Check Your Risk Here" type="secondary" />
+                </a>
+            </div>
+            </Card>
+
+
           {/* Screening Recommendations */}
           <Card title="Screening Recommendations" icon={<Heart size={24} className="text-purple-500" />}>
             <div className="space-y-4">
