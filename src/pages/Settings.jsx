@@ -242,7 +242,7 @@ const SettingsScreen = () => {
             />
           </SettingSection>
           
-          <button 
+          {/* <button 
             className="w-full flex items-center justify-center my-6 py-3 border rounded-lg hover:opacity-70 transition-opacity"
             style={{ borderColor: theme.error }}
             onClick={handleLogout}
@@ -254,7 +254,7 @@ const SettingsScreen = () => {
             >
               Log Out
             </span>
-          </button>
+          </button> */}
           
           <div 
             className="text-center text-sm mb-5"

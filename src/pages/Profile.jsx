@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   User,
   Calendar,
@@ -79,44 +79,83 @@ const ProfileSection = ({ title, icon: Icon, onClick }) => {
 const ProfileScreen = () => {
   const { theme } = useTheme();
   const [isEditing, setIsEditing] = useState(false);
-  const [userData, setUserData] = useState({
-    id: '1',
-    name: 'Sarah Smith',
-    email: 'sarah.smith@example.com',
-    dateOfBirth: '1990-05-15',
-    phoneNumber: '+1 (555) 123-4567',
-    profilePicture: 'https://i.pravatar.cc/300?img=5'
-  });
 
-  const [name, setName] = useState(userData.name);
-  const [email, setEmail] = useState(userData.email);
+  const getInitialUserData = () => {
+    const stored = localStorage.getItem('user');
+    if (stored) {
+      try {
+        const user = JSON.parse(stored);
+        return {
+          name: user.name || '',
+          email: user.email || '',
+          phoneNumber: user.phoneNumber || '',
+          dateOfBirth: user.dateOfBirth || '',
+          profilePicture: user.profilePicture || '/default-avatar.png',
+          initial: user.initial || (user.name ? user.name[0].toUpperCase() : 'U'),
+        };
+      } catch {
+        return {
+          name: '',
+      email: '',
+      phoneNumber: '',
+      dateOfBirth: '',
+      profilePicture: '/default-avatar.png',
+      initial: 'U',
+        };
+      }
+    }
+    return {};
+  };
+
+  const [userData, setUserData] = useState(getInitialUserData());
+  const [name, setName] = useState(userData.name || '');
+  const [email, setEmail] = useState(userData.email || '');
   const [phoneNumber, setPhoneNumber] = useState(userData.phoneNumber || '');
   const [dateOfBirth, setDateOfBirth] = useState(userData.dateOfBirth || '');
 
+  useEffect(() => {
+    const updated = getInitialUserData();
+    setUserData(updated);
+    setName(updated.name || '');
+    setEmail(updated.email || '');
+    setPhoneNumber(updated.phoneNumber || '');
+    setDateOfBirth(updated.dateOfBirth || '');
+  }, []);
+
   const handleSaveProfile = () => {
     if (!name || !email) return alert('Name and email are required');
-    setUserData({ ...userData, name, email, phoneNumber, dateOfBirth });
+
+    const updatedUser = {
+      ...userData,
+      name,
+      email,
+      phoneNumber,
+      dateOfBirth,
+      initial: name[0].toUpperCase(),
+    };
+
+    localStorage.setItem('user', JSON.stringify(updatedUser));
+    setUserData(updatedUser);
     setIsEditing(false);
     alert('Profile updated successfully');
   };
 
   const formatDate = (d) =>
-    new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
 
   return (
     <Layout>
       <div className="min-h-screen px-4 py-6 flex flex-col items-center" style={{ backgroundColor: theme.background, color: theme.text }}>
-        <div className="w-full max-w-6xl mx-auto"> {/* Broader layout for consistency */}
+        <div className="w-full max-w-6xl mx-auto">
 
           {/* Profile Header */}
           <div className="text-center mb-6">
             <div className="relative inline-block mb-4">
               <img
-                src={userData.profilePicture}
+                src={userData.profilePicture || '/default-avatar.png'}
                 alt="Profile"
-                className="w-28 h-28 rounded-full object-cover"
+                className="w-28 h-28 rounded-full object-cover bg-gray-300"
               />
-              {/* File input for photo */}
               <input
                 type="file"
                 accept="image/*"
@@ -127,7 +166,12 @@ const ProfileScreen = () => {
                   if (file) {
                     const reader = new FileReader();
                     reader.onloadend = () => {
-                      setUserData({ ...userData, profilePicture: reader.result});
+                      const updatedUser = {
+                        ...userData,
+                        profilePicture: reader.result,
+                      };
+                      setUserData(updatedUser);
+                      localStorage.setItem('user', JSON.stringify(updatedUser));
                     };
                     reader.readAsDataURL(file);
                   }

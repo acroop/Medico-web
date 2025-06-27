@@ -64,7 +64,7 @@ function InputField({
             onBlur={handleBlur}
             placeholder={placeholder}
             className={`flex-1 text-sm resize-none outline-none ${inputClassName}`}
-            style={{ color: theme.text }}
+            style={{ color: '#111' }}
           />
         ) : (
           <input
@@ -76,7 +76,7 @@ function InputField({
             placeholder={placeholder}
             autoCapitalize={autoCapitalize}
             className={`flex-1 text-sm outline-none ${inputClassName}`}
-            style={{ color: theme.text }}
+            style={{ color: '#111' }}
           />
         )}
 

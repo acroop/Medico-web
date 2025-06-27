@@ -1,14 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiCalendar, FiHeart, FiClipboard } from 'react-icons/fi';
 import { IoMedicalOutline, IoRibbonOutline } from 'react-icons/io5';
 import { useTheme } from '../context/ThemeContext';
 import Layout from '../components/Layout.jsx';
-import Button from '../components/Button'; // Importing the Button component
 
 const HomeScreen = () => {
   const navigate = useNavigate();
   const { theme } = useTheme();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const stored = localStorage.getItem('user');
+    if (stored) {
+      try {
+        setUser(JSON.parse(stored));
+      } catch {
+        setUser(null);
+      }
+    } else {
+      setUser(null);
+    }
+  }, []);
 
   const upcomingPeriod = "June 28, 2025";
   const nextAppointment = {
@@ -66,10 +79,23 @@ const HomeScreen = () => {
     <Layout>
       <div className="min-h-screen px-4 py-6 flex flex-col items-center" style={{ backgroundColor: theme.background, color: theme.text }}>
         <div className="w-full max-w-6xl mx-auto"> {/* Standardized wrapper */}
+          {/* Sign In Button */}
+          <div className="flex justify-end mb-6">
+            {!user && (
+              <button
+                className="px-4 py-2 rounded-md font-semibold"
+                style={{ backgroundColor: theme.primary, color: theme.text, border: 'none' }}
+                onClick={() => navigate('/auth')}
+              >
+                Sign In
+              </button>
+            )}
+          </div>
+
           {/* Header */}
           <div className="flex justify-between items-center mb-6 mt-2">
             <div>
-              <h1 className="text-2xl font-bold">Hello, Sarah</h1>
+              <h1 className="text-2xl font-bold">Hello, {user ? user.name?.split(' ')[0] : 'Guest'}</h1>
               <p className="text-sm" style={{ color: theme.textSecondary }}>
                 How are you feeling today?
               </p>
@@ -80,10 +106,9 @@ const HomeScreen = () => {
               style={{ backgroundColor: theme.primary }}
               title="Go to Profile"
             >
-              S
+              {user ? (user.initial || user.name?.[0]) : 'G'}
             </div>
           </div>
-
           {/* Reminders stacked vertically */}
           <div className="flex flex-col gap-4 mb-6">
             {/* Upcoming Period Card */}
@@ -95,13 +120,13 @@ const HomeScreen = () => {
                 Expected on <strong style={{ color: theme.text }}>{upcomingPeriod}</strong>
               </p>
               <div className="flex justify-start mt-1">
-                <Button
-                  title="Track Period"
-                  onPress={() => navigate('/period-tracker')}
-                  type="outline"
-                  size="small"
-                  style={{ color: theme.primary, borderColor: theme.primary, backgroundColor: theme.background, fontWeight: 500, padding: '2px 10px', fontSize: 12, minWidth: 0 }}
-                />
+                <button
+                  className="px-3 py-1 rounded-md text-sm font-medium"
+                  style={{ color: theme.primary, borderColor: theme.primary, backgroundColor: theme.background, borderWidth: 1, borderStyle: 'solid' }}
+                  onClick={() => navigate('/period-tracker')}
+                >
+                  Track Period
+                </button>
               </div>
             </div>
 
@@ -113,13 +138,13 @@ const HomeScreen = () => {
               <p className="text-xs mb-1" style={{ color: theme.text }}>{`${nextAppointment.date} at ${nextAppointment.time}`}</p>
               <p className="text-xs mb-2" style={{ color: theme.textSecondary }}>{`With ${nextAppointment.doctor}`}</p>
               <div className="flex justify-start mt-1">
-                <Button
-                  title="View Details"
-                  onPress={() => navigate('/consult-doctor')}
-                  type="outline"
-                  size="small"
-                  style={{ color: theme.secondary, borderColor: theme.secondary, backgroundColor: theme.background, fontWeight: 500, padding: '2px 10px', fontSize: 12, minWidth: 0 }}
-                />
+                <button
+                  className="px-3 py-1 rounded-md text-sm font-medium"
+                  style={{ color: theme.secondary, borderColor: theme.secondary, backgroundColor: theme.background, borderWidth: 1, borderStyle: 'solid' }}
+                  onClick={() => navigate('/consult-doctor')}
+                >
+                  View Details
+                </button>
               </div>
             </div>
           </div>

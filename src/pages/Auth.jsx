@@ -4,6 +4,7 @@ import { useTheme } from '../context/ThemeContext';
 import InputField from '../components/InputField';
 import Button from '../components/Button';
 import Layout from '../components/Layout.jsx';
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -20,7 +21,18 @@ const Auth = () => {
   const [secureTextEntry, setSecureTextEntry] = useState(true);
 
   const handleAuth = () => {
+    const fullName = isLogin ? email.split('@')[0].replace(/[0-9]/g, '') : name;
+    const user = {
+      name: fullName.replace('.', ' ').replace('_', ' '),
+      email,
+      initial: fullName[0].toUpperCase(),
+      phoneNumber: '',
+      dateOfBirth: '',
+      profilePicture: '',
+    };
+
     localStorage.setItem('@user_authenticated', 'true');
+    localStorage.setItem('user', JSON.stringify(user));
     navigate('/home');
   };
 
@@ -55,42 +67,46 @@ const Auth = () => {
             {!isLogin && (
               <InputField
                 value={name}
-                onChangeText={setName}
+                onChange={setName}
                 label="Full Name"
                 placeholder="Enter your name"
                 leftIcon="person"
+                inputClassName="text-black"
               />
             )}
 
             <InputField
               value={email}
-              onChangeText={setEmail}
+              onChange={setEmail}
               label="Email"
               placeholder="Enter your email"
               keyboardType="email"
               autoCapitalize="none"
               leftIcon="mail"
+              inputClassName="text-black"
             />
 
             <InputField
               value={password}
-              onChangeText={setPassword}
+              onChange={setPassword}
               label="Password"
               placeholder="Enter your password"
               secureTextEntry={secureTextEntry}
               leftIcon="lock-closed"
               rightIcon={secureTextEntry ? 'eye' : 'eye-off'}
               onRightIconPress={() => setSecureTextEntry(!secureTextEntry)}
+              inputClassName="text-black"
             />
 
             {!isLogin && (
               <InputField
                 value={confirmPassword}
-                onChangeText={setConfirmPassword}
+                onChange={setConfirmPassword}
                 label="Confirm Password"
                 placeholder="Confirm your password"
                 secureTextEntry={secureTextEntry}
                 leftIcon="lock-closed"
+                inputClassName="text-black"
               />
             )}
 
@@ -102,7 +118,47 @@ const Auth = () => {
               </div>
             )}
 
-            <Button title={isLogin ? 'Sign In' : 'Sign Up'} onPress={handleAuth} />
+            <Button title={isLogin ? 'Sign In' : 'Sign Up'} onPress={handleAuth} style={{ width: '100%' }} />
+
+            <div className="flex justify-center mt-2">
+              <GoogleOAuthProvider clientId="105611395570-k8jjt53de3i2qglrd5m5ocejef5u663i.apps.googleusercontent.com">
+                <GoogleLogin
+                  onSuccess={credentialResponse => {
+                    const jwt = credentialResponse.credential;
+                    if (jwt) {
+                      const base64Url = jwt.split('.')[1];
+                      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                      const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                      }).join(''));
+
+                      const user = JSON.parse(jsonPayload);
+                      const fullName = user.name || user.email.split('@')[0];
+
+                      const savedUser = {
+                        name: fullName,
+                        email: user.email,
+                        initial: fullName[0].toUpperCase(),
+                        profilePicture: user.picture || '',
+                        phoneNumber: '',
+                        dateOfBirth: ''
+                      };
+
+                      localStorage.setItem('@user_authenticated', 'true');
+                      localStorage.setItem('user', JSON.stringify(savedUser));
+                    }
+                    navigate('/home');
+                  }}
+                  onError={() => {
+                    alert('Google sign-in failed');
+                  }}
+                  width="100%"
+                  theme="filled_black"
+                  text="signin_with"
+                  shape="pill"
+                />
+              </GoogleOAuthProvider>
+            </div>
 
             <div className="text-center text-sm text-gray-500 dark:text-gray-400 mt-4">
               {isLogin ? "Don't have an account?" : 'Already have an account?'}

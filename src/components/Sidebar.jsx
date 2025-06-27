@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { FiX, FiSettings, FiUser } from 'react-icons/fi';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { FiX, FiSettings, FiUser, FiLogOut } from 'react-icons/fi'; // 👈 Added LogOut icon
 import { useTheme } from '../context/ThemeContext';
 
 const menuItems = [
@@ -17,10 +17,22 @@ const menuItems = [
 const Sidebar = ({ open, setOpen }) => {
   const { theme } = useTheme();
   const location = useLocation();
+  const navigate = useNavigate(); // 👈 Add navigate hook
+
+  const handleLogout = () => {
+    // Clear relevant localStorage values
+    localStorage.removeItem('user');
+    localStorage.removeItem('@user_authenticated');
+    localStorage.removeItem('@user_email');
+    localStorage.removeItem('@user_name');
+    localStorage.removeItem('@user_picture');
+    localStorage.removeItem('@user_initial');
+    setOpen(false);
+    navigate('/auth');
+  };
 
   return (
     <>
-      {/* Overlay (click to close sidebar) */}
       <div
         className={`fixed inset-0 bg-black bg-opacity-40 z-40 transition-opacity duration-300 ${
           open ? 'opacity-100 visible' : 'opacity-0 invisible'
@@ -28,14 +40,12 @@ const Sidebar = ({ open, setOpen }) => {
         onClick={() => setOpen(false)}
       />
 
-      {/* Sidebar container */}
       <div
         className={`fixed top-0 left-0 h-full w-64 z-50 transform transition-transform duration-300 ease-in-out ${
           open ? 'translate-x-0' : '-translate-x-full'
         }`}
         style={{ backgroundColor: theme.card, color: theme.text }}
       >
-        {/* Header */}
         <div
           className="flex justify-between items-center px-4 py-3 border-b"
           style={{ borderColor: theme.border }}
@@ -46,7 +56,6 @@ const Sidebar = ({ open, setOpen }) => {
           </button>
         </div>
 
-        {/* Menu Items */}
         <div className="p-4 space-y-3">
           {menuItems.map((item) => (
             <Link
@@ -62,14 +71,24 @@ const Sidebar = ({ open, setOpen }) => {
             </Link>
           ))}
           <hr className="my-3" style={{ borderColor: theme.border }} />
-          <Link to="/profile" className="flex items-center space-x-2 px-2 py-1 rounded hover:opacity-80" style={{ color: theme.text }} onClick={() => setOpen(false)}>
+          <Link to="/profile" onClick={() => setOpen(false)} className="flex items-center space-x-2 px-2 py-1 rounded hover:opacity-80" style={{ color: theme.text }}>
             <FiUser size={18} />
             <span>Profile</span>
           </Link>
-          <Link to="/settings" className="flex items-center space-x-2 px-2 py-1 rounded hover:opacity-80" style={{ color: theme.text }} onClick={() => setOpen(false)}>
+          <Link to="/settings" onClick={() => setOpen(false)} className="flex items-center space-x-2 px-2 py-1 rounded hover:opacity-80" style={{ color: theme.text }}>
             <FiSettings size={18} />
             <span>Settings</span>
           </Link>
+
+          {/* ✅ Logout Button */}
+          <button
+            onClick={handleLogout}
+            className="flex items-center space-x-2 px-2 py-1 rounded hover:opacity-80 w-full text-left mt-4"
+            style={{ color: theme.text }}
+          >
+            <FiLogOut size={18} />
+            <span>Log Out</span>
+          </button>
         </div>
       </div>
     </>
