@@ -16,7 +16,7 @@ const Layout = ({ children }) => {
       <div className={sidebarOpen ? 'opacity-0 pointer-events-none' : ''}>
         <button
           onClick={() => setSidebarOpen(true)}
-          className="fixed top-4 left-4 z-50 w-10 h-10 flex items-center justify-center rounded-full shadow-lg transition duration-300"
+          className="fixed top-4 left-4 z-50 w-10 h-10 flex items-center justify-center font-bold rounded-full shadow-lg transition duration-300 hover:rotate-90"
           style={{
             backgroundColor: theme.accent,
             color: theme.buttonText,
