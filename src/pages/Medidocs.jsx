@@ -201,7 +201,7 @@ const MedidocsScreen = () => {
 												hash: data.hash,
 												url: data.fileUrl,
 												originalFileName: data.originalFileName,
-												savedAs: data.savedAs
+												savedAs: data.savedAsṣ
 											}]);
 											setModalOpen(false);
 											setFile(null);

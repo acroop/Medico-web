@@ -58,13 +58,13 @@ const Sidebar = ({ open, setOpen }) => {
           </button>
         </div>
 
-        <div className="p-4 space-y-3">
+        <div className="py-3 px-4 space-y-3">
           {menuItems.map((item) => (
             <Link
               key={item.route}
               to={item.route}
               onClick={() => setOpen(false)}
-              className={`block px-2 py-1 rounded hover:opacity-80 ${
+              className={`block px-2 py-2 rounded hover:opacity-80 hover:bg-[#FF69B4] ${
                 location.pathname === item.route ? 'font-bold' : ''
               }`}
               style={{ color: theme.text }}
@@ -73,11 +73,11 @@ const Sidebar = ({ open, setOpen }) => {
             </Link>
           ))}
           <hr className="my-3" style={{ borderColor: theme.border }} />
-          <Link to="/profile" onClick={() => setOpen(false)} className="flex items-center space-x-2 px-2 py-1 rounded hover:opacity-80" style={{ color: theme.text }}>
+          <Link to="/profile" onClick={() => setOpen(false)} className="flex items-center space-x-2 px-2 hover:bg-[#FF69B4] py-2 rounded hover:opacity-80" style={{ color: theme.text }}>
             <FiUser size={18} />
             <span>Profile</span>
           </Link>
-          <Link to="/settings" onClick={() => setOpen(false)} className="flex items-center space-x-2 px-2 py-1 rounded hover:opacity-80" style={{ color: theme.text }}>
+          <Link to="/settings" onClick={() => setOpen(false)} className="flex items-center space-x-2 px-2 hover:bg-[#FF69B4] py-2 rounded hover:opacity-80" style={{ color: theme.text }}>
             <FiSettings size={18} />
             <span>Settings</span>
           </Link>
@@ -85,7 +85,7 @@ const Sidebar = ({ open, setOpen }) => {
           {/* ✅ Logout Button */}
           <button
             onClick={handleLogout}
-            className="flex items-center space-x-2 px-2 py-1 rounded hover:opacity-80 w-full text-left mt-4"
+            className="flex items-center space-x-2 px-2 py-2 rounded hover:bg-[#FF69B4] hover:opacity-80 w-full text-left mt-4"
             style={{ color: theme.text }}
           >
             <FiLogOut size={18} />

@@ -19,6 +19,7 @@ export const lightTheme = {
 };
 
 export const darkTheme = {
+  calCol: '#FFFFF',
   primary: '#FF69B4',
   secondary: '#9370DB',
   background: '#121212',

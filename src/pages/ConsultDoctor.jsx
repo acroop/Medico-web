@@ -38,7 +38,7 @@ const ConsultDoctor = () => {
   const [isMapExpanded, setIsMapExpanded] = useState(false);
 
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: "YOUR_API_KEY", // Replace with your actual Google Maps API key
+    googleMapsApiKey: "AIzaSyCaffkrUBk4OEsmAYqGcF48LYdau-uC32E", // Replace with your actual Google Maps API key
     libraries: ["places"],
   });
 
