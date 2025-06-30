@@ -98,5 +98,22 @@ app.delete('/delete/:filename', (req, res) => {
   }
 });
 
+// GET /file/:filename -> return full file URL from ledger
+app.get('/file/:filename', (req, res) => {
+  const filename = req.params.filename;
+  try {
+    const ledger = JSON.parse(fs.readFileSync(ledgerFile, 'utf8'));
+    const entry = ledger.find(doc => doc.savedAs === filename || doc.originalFileName === filename);
+
+    if (!entry) return res.status(404).json({ error: 'File not found in ledger.' });
+
+    return res.json({ fileUrl: entry.fileUrl });
+  } catch (err) {
+    console.error('Error fetching file from ledger:', err);
+    res.status(500).json({ error: 'Internal server error.' });
+  }
+});
+
+
 // Start server
 app.listen(5000, () => console.log('🚀 Hash node with full audit log running on http://localhost:5000'));

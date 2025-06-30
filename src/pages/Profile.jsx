@@ -80,7 +80,7 @@ const ProfileSection = ({ title, icon: Icon, onClick }) => {
 const ProfileScreen = () => {
   const { theme } = useTheme();
   const [isEditing, setIsEditing] = useState(false);
-  
+
 
   const getInitialUserData = () => {
     const stored = localStorage.getItem('user');
@@ -98,11 +98,11 @@ const ProfileScreen = () => {
       } catch {
         return {
           name: '',
-      email: '',
-      phoneNumber: '',
-      dateOfBirth: '',
-      profilePicture: '/default-avatar.png',
-      initial: 'U',
+          email: '',
+          phoneNumber: '',
+          dateOfBirth: '',
+          profilePicture: '/default-avatar.png',
+          initial: 'U',
         };
       }
     }

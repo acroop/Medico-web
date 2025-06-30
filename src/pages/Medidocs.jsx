@@ -86,6 +86,24 @@ const MedidocsScreen = () => {
 		}
 	};
 
+const handleOpen = async (doc) => {
+  try {
+    const filename = doc.savedAs || doc.originalFileName;
+    const res = await fetch(`http://localhost:5000/file/${filename}`);
+    const data = await res.json();
+
+    if (res.ok && data.fileUrl) {
+      window.open(data.fileUrl, '_blank', 'noopener,noreferrer');
+    } else {
+      alert(data.error || 'File URL not found.');
+    }
+  } catch (error) {
+    console.error('Error opening document:', error);
+    alert('Failed to open document.');
+  }
+};
+``
+
 	return (
 		<Layout>
 			<div className="min-h-screen px-4 py-6 flex flex-col items-center" style={{ backgroundColor: theme.background, color: theme.text }}>
@@ -141,13 +159,7 @@ const MedidocsScreen = () => {
 											<button
 												className="mt-0 px-3 py-1 rounded border text-xs bg-white border-green-200 text-green-700 hover:bg-green-50 hover:text-green-800 transition-colors"
 												style={{ borderColor: theme.primary, color: theme.primary, background: theme.surface }}
-												onClick={() => {
-													let url = doc.fileUrl;
-													if (!url && doc.originalFileName) {
-														url = `${window.location.origin}/uploads/${doc.originalFileName}`;
-													}
-													window.open(url, '_blank', 'noopener,noreferrer');
-												}}
+												onClick={() => handleOpen(doc)}
 											>
 												Open File
 											</button>
